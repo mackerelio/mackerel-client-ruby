@@ -23,7 +23,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "GET /api/v0/tsdb faield: #{response.status}"
+        raise "GET /api/v0/tsdb faild: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -39,7 +39,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "GET /api/v0/hosts.json faield: #{response.status}"
+        raise "GET /api/v0/hosts.json faild: #{response.status}"
       end
 
       data = JSON.parse(response.body)
