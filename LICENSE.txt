@@ -1,4 +1,4 @@
-Copyright (c) 2014 hatz48
+Copyright (c) 2014 Mackerel developer team
 
 MIT License
 
