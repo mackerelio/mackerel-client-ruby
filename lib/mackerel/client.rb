@@ -1,5 +1,4 @@
 require 'faraday'
-require 'open-uri'
 require 'uri'
 
 require 'json' unless defined? ::JSON
