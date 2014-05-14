@@ -3,6 +3,7 @@ require 'open-uri'
 require 'uri'
 
 require 'json' unless defined? ::JSON
+require 'mackerel/host'
 
 module Mackerel
 
@@ -43,7 +44,7 @@ module Mackerel
       end
 
       data = JSON.parse(response.body)
-      data['hosts']
+      data['hosts'].map{ |host_json| Host.new(host_json) }
     end
 
     private
