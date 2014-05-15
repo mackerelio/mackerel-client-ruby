@@ -28,13 +28,14 @@ module Mackerel
       data = JSON.parse(response.body)
     end
 
-    def get_hosts(service = nil, roles = nil)
+    def get_hosts(service = nil, roles = nil, opts = {})
       client = http_client
 
       response = client.get '/api/v0/hosts.json' do |req|
         req.headers['X-Api-Key'] = @api_key
-        req.params['service']    = service if service
-        req.params['role']       = roles   if roles
+        req.params['service']    = service     if service
+        req.params['role']       = roles       if roles
+        req.params['name']       = opts[:name] if opts[:name]
       end
 
       unless response.success?
