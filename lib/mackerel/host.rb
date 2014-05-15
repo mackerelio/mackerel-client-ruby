@@ -6,7 +6,7 @@ module Mackerel
     attr_accessor :name, :type, :status, :memo, :isRetired, :id, :createdAt, :roles, :interfaces
 
     def initialize(args = {})
-      @json       = args
+      @hash       = args
       @name       = args["name"]
       @meta       = args["meta"]
       @type       = args["type"]
@@ -33,8 +33,8 @@ module Mackerel
       interface['macAddress'] if interface
     end
 
-    def to_json
-      return @json
+    def to_h
+      return @hash
     end
   end
 
