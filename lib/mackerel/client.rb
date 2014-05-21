@@ -14,7 +14,7 @@ module Mackerel
     end
 
     def update_host_status(host_id, status)
-      unless [:standby, :working, :maintenance, :poweroff].any?{|s| s == status }
+      unless [:standby, :working, :maintenance, :poweroff].any?{|s| s == status.to_sym }
         raise "no such status: #{status}"
       end
 
