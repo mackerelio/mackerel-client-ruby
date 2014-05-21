@@ -13,6 +13,26 @@ module Mackerel
       @api_key = args[:mackerel_api_key]
     end
 
+    def update_host_status(host_id, status)
+      unless [:standby, :working, :maintenance, :poweroff].any?{|s| s == status }
+        raise "no such status: #{status}"
+      end
+
+      client = http_client
+
+      response = client.post "/api/v0/hosts/#{host_id}/status" do |req|
+        req.headers['X-Api-Key'] = @api_key
+        req.headers['Content-Type'] = 'application/json'
+        req.body = { "status" => status }.to_json
+      end
+
+      unless response.success?
+        raise "GET /api/v0/hosts/#{host_id}/status faild: #{response.status}"
+      end
+
+      data = JSON.parse(response.body)
+    end
+
     def post_metrics(metrics)
       client = http_client
 
