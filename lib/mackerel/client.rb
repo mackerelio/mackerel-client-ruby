@@ -72,6 +72,7 @@ module Mackerel
         req.params['service']    = opts[:service] if opts[:service]
         req.params['role']       = opts[:roles]   if opts[:roles]
         req.params['name']       = opts[:name]    if opts[:name]
+        req.params['hostId']     = opts[:hostid]  if opts[:hostid]
       end
 
       unless response.success?
