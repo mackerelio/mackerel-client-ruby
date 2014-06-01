@@ -1,0 +1,197 @@
+require 'mackerel'
+require 'mackerel/host'
+require 'json'
+
+describe Mackerel::Client do
+  let(:api_key) { 'xxxxxxxx' }
+  let(:client) { Mackerel::Client.new(:mackerel_api_key => api_key) }
+
+  describe '#get_host' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump({'host' => host.to_h})
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts/#{hostId}" }
+
+    let(:host) {
+      Mackerel::Host.new(
+        'name' => 'db001',
+        'meta' => {
+          'agent-name' => 'mackerel-agent/0.6.1',
+          'agent-revision' => 'bc2f9f6',
+          'agent-version'  => '0.6.1',
+        },
+        'type' => 'unknown',
+        'status' => 'working',
+        'memo' => 'test host',
+        'isRetired' => false,
+        'id' => hostId,
+        'createdAt' => '1401291976',
+        'roles' => [
+          'mackerel' => ['db']
+        ],
+        'interfaces' => [{
+            "ipAddress"   => "10.0.0.1",
+            "macAddress"  => "08:00:27:ce:08:3d",
+            "name"        => "eth0"
+        }],
+      )
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully find host" do
+      expect(client.get_host(hostId).to_h).to eq(host.to_h)
+    end
+  end
+
+  describe '#update_host_status' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts/#{hostId}/status" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully update host status" do
+      expect(client.update_host_status(hostId, :maintenance)).to eq(response_object)
+    end
+  end
+
+  describe '#post_metrics' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/tsdb" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    let(:metrics) { [
+        { 'hostId' => hostId, 'name' => 'custom.metrics.loadavg', 'time' => 1401537844, 'value' => 1.4 },
+        { 'hostId' => hostId, 'name' => 'custom.metrics.uptime',  'time' => 1401537844, 'value' => 500 },
+    ] }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully post metrics" do
+      expect(client.post_metrics(metrics)).to eq(response_object)
+    end
+  end
+
+  describe '#get_hosts' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump({ 'hosts' => hosts.map(&:to_h) })
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts.json" }
+
+    let(:hosts) {
+      [
+        Mackerel::Host.new(
+          'name' => 'mackereldb001',
+          'meta' => {
+            'agent-name' => 'mackerel-agent/0.6.1',
+            'agent-revision' => 'bc2f9f6',
+            'agent-version'  => '0.6.1',
+          },
+          'type' => 'unknown',
+          'status' => 'working',
+          'memo' => 'test host',
+          'isRetired' => false,
+          'id' => hostId,
+          'createdAt' => '1401291976',
+          'roles' => [
+            'mackerel' => ['db']
+          ],
+          'interfaces' => [{
+              "ipAddress"   => "10.0.0.1",
+              "macAddress"  => "08:00:27:ce:08:3d",
+              "name"        => "eth0"
+          }],
+        )
+      ]
+    }
+
+    let(:opts) {
+      { :service => 'mackerel', :roles => 'db' }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully get hosts" do
+      expect(client.get_hosts(opts).map(&:to_h)).to eq(hosts.map(&:to_h))
+    end
+  end
+end
