@@ -64,6 +64,22 @@ module Mackerel
       data = JSON.parse(response.body)
     end
 
+    def post_service_metrics(service_name, metrics)
+      client = http_client
+
+      response = client.post "/api/v0/services/#{service_name}/tsdb" do |req|
+        req.headers['X-Api-Key'] = @api_key
+        req.headers['Content-Type'] = 'application/json'
+        req.body = metrics.to_json
+      end
+
+      unless response.success?
+        raise "POST /api/v0/tsdb faild: #{response.status}"
+      end
+
+      data = JSON.parse(response.body)
+    end
+
     def get_hosts(opts = {})
       client = http_client
 
