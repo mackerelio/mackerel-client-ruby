@@ -74,7 +74,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/tsdb faild: #{response.status}"
+        raise "POST /api/v0/services/#{service_name}/tsdb faild: #{response.status}"
       end
 
       data = JSON.parse(response.body)
