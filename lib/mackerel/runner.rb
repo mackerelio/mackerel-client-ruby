@@ -36,6 +36,9 @@ module Mackerel
   Set status of a host
     mkr host status --host-id foo --status working
 
+  Retire a host
+    mkr host retire --host-id foo
+
   Authentication
     API key must be set to the environment variable as follows.
       export MACKEREL_APIKEY=foobar
@@ -71,6 +74,14 @@ module Mackerel
             end
 
           end
+ 
+      when 'retire'
+        opt.parse!(args)
+        begin
+          res = mc.retire_host(params[:hostid])
+        rescue => msg
+          abort "Error: #{msg}"
+        end
  
       when 'info'
           opt.on('--service SERVICE'){|v| params[:service] = v }
