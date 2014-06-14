@@ -1,7 +1,6 @@
-# Mackerel::Client
+# mackerel-client [![Build Status](https://travis-ci.org/mackerelio/mackerel-client-ruby.svg?branch=master)](https://travis-ci.org/mackerelio/mackerel-client-ruby)
 
-TODO: Write a gem description
-
+mackerel-client is a ruby library to access Mackerel (https://mackerel.io/). CLI tool `mkr` is also provided.
 
 # CLI
 
@@ -31,8 +30,3 @@ mkr host status --host-id foo
 ```
 export MACKEREL_APIKEY=foobar
 ```
-
-## reference
-* http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html
-* https://github.com/aws/aws-cli
-
