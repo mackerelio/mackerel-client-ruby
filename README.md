@@ -17,6 +17,11 @@ mkr host info [--name foo] [--service service] [--role role]
 mkr host status --host-id foo --status working
 ```
 
+* Retire a host
+```
+mkr host retire --host-id foo
+```
+
 * Get status of a host (not implemented yet)
 ```
 mkr host status --host-id foo

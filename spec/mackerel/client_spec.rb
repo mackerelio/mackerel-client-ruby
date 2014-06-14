@@ -95,6 +95,40 @@ describe Mackerel::Client do
     end
   end
 
+  describe '#retire_host' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts/#{hostId}/retire" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully retire a host" do
+      expect(client.retire_host(hostId)).to eq(response_object)
+    end
+  end
+
   describe '#post_metrics' do
     let(:stubbed_response) {
       [

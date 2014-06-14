@@ -48,6 +48,22 @@ module Mackerel
       data = JSON.parse(response.body)
     end
 
+    def retire_host(host_id)
+      client = http_client
+
+      response = client.post "/api/v0/hosts/#{host_id}/retire" do |req|
+        req.headers['X-Api-Key'] = @api_key
+        req.headers['Content-Type'] = 'application/json'
+        req.body = { }.to_json
+      end
+
+      unless response.success?
+        raise "POST /api/v0/hosts/#{host_id}/retire faild: #{response.status}"
+      end
+
+      data = JSON.parse(response.body)
+    end
+
     def post_metrics(metrics)
       client = http_client
 
