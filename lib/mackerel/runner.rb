@@ -74,7 +74,7 @@ module Mackerel
             end
 
           end
- 
+
       when 'retire'
         opt.parse!(args)
         begin
@@ -82,27 +82,27 @@ module Mackerel
         rescue => msg
           abort "Error: #{msg}"
         end
- 
+
       when 'info'
-          opt.on('--service SERVICE'){|v| params[:service] = v }
-          opt.on('--role ROLE')      {|v| params[:role] = v }
-          opt.on('--name NAME')      {|v| params[:name] = v }
-          opt.on('--host-id HOSTID') {|v| params[:hostId] = v }
-          opt.parse!(args)
-          begin
-            if params[:hostid]
-              res = [ mc.get_host(params[:hostId]) ]
-            else
-              res = mc.get_hosts(params)
-            end
-          rescue => msg
-            abort "Error: #{msg}"
+        opt.on('--service SERVICE'){|v| params[:service] = v }
+        opt.on('--role ROLE')      {|v| params[:roles] = v }
+        opt.on('--name NAME')      {|v| params[:name] = v }
+        opt.on('--host-id HOSTID') {|v| params[:hostId] = v }
+        opt.parse!(args)
+        begin
+          if params[:hostid]
+            res = [ mc.get_host(params[:hostId]) ]
+          else
+            res = mc.get_hosts(params)
           end
-          res.each do |res|
-            puts <<-EOS
+        rescue => msg
+          abort "Error: #{msg}"
+        end
+        res.each do |res|
+          puts <<-EOS
 name: #{res.name}, status: #{res.status}, id: #{res.id}, roles: #{res.roles}
           EOS
-          end
+        end
       else
         abort "Error: `#{command}` command not found for host."
       end
