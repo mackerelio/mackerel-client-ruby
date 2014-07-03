@@ -168,6 +168,45 @@ describe Mackerel::Client do
     end
   end
 
+  describe '#post_service_metrics' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:service_name) { 'service_name' }
+
+    let(:api_path) { "/api/v0/services/#{service_name}/tsdb" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    let(:metrics) { [
+        { 'name' => 'custom.metrics.latency', 'time' => 1401537844, 'value' => 0.5 },
+        { 'name' => 'custom.metrics.uptime',  'time' => 1401537844, 'value' => 500 },
+    ] }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully post metrics" do
+      expect(client.post_service_metrics(service_name, metrics)).to eq(response_object)
+    end
+  end
+
   describe '#get_hosts' do
     let(:stubbed_response) {
       [
