@@ -168,6 +168,48 @@ describe Mackerel::Client do
     end
   end
 
+  describe "#get_latest_metrics" do
+    let(:stubbed_response) {
+      [
+       200,
+       {},
+       JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:metric_name) { "loadavg5" }
+
+    let(:api_path) { "/api/v0/tsdb/latest" }
+
+    let(:response_object) {
+      {
+        "tsdbLatest" => {
+          hostId => {
+            metric_name => {"time"=>1407898200, "value"=>0.03666666666666667},
+          }
+        }
+      }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully post metrics" do
+      expect(client.get_latest_metrics([hostId], [metric_name])).to eq(response_object["tsdbLatest"])
+    end
+  end
+
   describe '#post_service_metrics' do
     let(:stubbed_response) {
       [

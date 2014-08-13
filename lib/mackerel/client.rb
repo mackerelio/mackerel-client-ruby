@@ -80,6 +80,23 @@ module Mackerel
       data = JSON.parse(response.body)
     end
 
+    def get_latest_metrics(hostIds, names)
+      query = (hostIds.map{ |hostId| "hostId=#{hostId}" } +
+               names.map{ |name| "name=#{name}" }).join('&')
+
+      client = http_client
+      response = client.get "/api/v0/tsdb/latest?#{query}" do |req|
+        req.headers['X-Api-Key'] = @api_key
+      end
+
+      unless response.success?
+        raise "/api/v0/tsdb/latest?#{query} faild: #{response.status}"
+      end
+
+      data = JSON.parse(response.body)
+      data["tsdbLatest"]
+    end
+
     def post_service_metrics(service_name, metrics)
       client = http_client
 
