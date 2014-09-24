@@ -8,9 +8,11 @@ module Mackerel
 
   class Client
 
+    ERROR_MESSAGE_FOR_API_KEY_ABSENCE = "API key is absent. Set your API key in a environment variable called MACKEREL_APIKEY."
+
     def initialize(args = {})
       @origin  = args[:mackerel_origin] || 'https://mackerel.io'
-      @api_key = args[:mackerel_api_key]
+      @api_key = args[:mackerel_api_key] || raise(ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
     end
 
     def get_host(host_id)
