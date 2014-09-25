@@ -6,6 +6,13 @@ describe Mackerel::Client do
   let(:api_key) { 'xxxxxxxx' }
   let(:client) { Mackerel::Client.new(:mackerel_api_key => api_key) }
 
+  describe 'initialization' do
+    it 'display an error message when api_key is absent' do
+      expected_message = "API key is absent. Set your API key in a environment variable called MACKEREL_APIKEY."
+      expect { Mackerel::Client.new() }.to raise_error(expected_message)
+    end
+  end
+
   describe '#get_host' do
     let(:stubbed_response) {
       [
