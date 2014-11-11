@@ -2,6 +2,13 @@
 
 mackerel-client is a ruby library to access Mackerel (https://mackerel.io/). CLI tool `mkr` is also provided.
 
+## Usage
+
+```ruby
+@mackerel = Mackerel::Client.new(:mackerel_api_key => "<Put your API key")
+host = @mackerel.get_host("<hostId>")
+```
+
 # CLI
 
 ## Host
