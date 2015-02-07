@@ -16,8 +16,6 @@ module Mackerel
     end
 
     def get_host(host_id)
-      client = http_client
-
       response = client.get "/api/v0/hosts/#{host_id}" do |req|
         req.headers['X-Api-Key'] = @api_key
       end
@@ -35,8 +33,6 @@ module Mackerel
         raise "no such status: #{status}"
       end
 
-      client = http_client
-
       response = client.post "/api/v0/hosts/#{host_id}/status" do |req|
         req.headers['X-Api-Key'] = @api_key
         req.headers['Content-Type'] = 'application/json'
@@ -51,8 +47,6 @@ module Mackerel
     end
 
     def retire_host(host_id)
-      client = http_client
-
       response = client.post "/api/v0/hosts/#{host_id}/retire" do |req|
         req.headers['X-Api-Key'] = @api_key
         req.headers['Content-Type'] = 'application/json'
@@ -67,8 +61,6 @@ module Mackerel
     end
 
     def post_metrics(metrics)
-      client = http_client
-
       response = client.post '/api/v0/tsdb' do |req|
         req.headers['X-Api-Key'] = @api_key
         req.headers['Content-Type'] = 'application/json'
@@ -86,7 +78,6 @@ module Mackerel
       query = (hostIds.map{ |hostId| "hostId=#{hostId}" } +
                names.map{ |name| "name=#{name}" }).join('&')
 
-      client = http_client
       response = client.get "/api/v0/tsdb/latest?#{query}" do |req|
         req.headers['X-Api-Key'] = @api_key
       end
@@ -100,8 +91,6 @@ module Mackerel
     end
 
     def post_service_metrics(service_name, metrics)
-      client = http_client
-
       response = client.post "/api/v0/services/#{service_name}/tsdb" do |req|
         req.headers['X-Api-Key'] = @api_key
         req.headers['Content-Type'] = 'application/json'
@@ -116,8 +105,6 @@ module Mackerel
     end
 
     def get_hosts(opts = {})
-      client = http_client
-
       response = client.get '/api/v0/hosts.json' do |req|
         req.headers['X-Api-Key'] = @api_key
         req.params['service']    = opts[:service] if opts[:service]
@@ -134,6 +121,10 @@ module Mackerel
     end
 
     private
+
+    def client
+      @client ||= http_client
+    end
 
     def http_client
       Faraday.new(:url => @origin) do |faraday|
