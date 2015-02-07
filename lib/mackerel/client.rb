@@ -23,7 +23,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "GET /api/v0/hosts/#{host_id} faild: #{response.status}"
+        raise "GET /api/v0/hosts/#{host_id} failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -44,7 +44,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/hosts/#{host_id}/status faild: #{response.status}"
+        raise "POST /api/v0/hosts/#{host_id}/status failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -60,7 +60,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/hosts/#{host_id}/retire faild: #{response.status}"
+        raise "POST /api/v0/hosts/#{host_id}/retire failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -76,7 +76,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/tsdb faild: #{response.status}"
+        raise "POST /api/v0/tsdb failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -92,7 +92,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "/api/v0/tsdb/latest?#{query} faild: #{response.status}"
+        raise "/api/v0/tsdb/latest?#{query} failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -109,7 +109,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/services/#{service_name}/tsdb faild: #{response.status}"
+        raise "POST /api/v0/services/#{service_name}/tsdb failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
@@ -126,7 +126,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "GET /api/v0/hosts.json faild: #{response.status}"
+        raise "GET /api/v0/hosts.json failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
