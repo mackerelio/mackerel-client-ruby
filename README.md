@@ -15,23 +15,26 @@ host = @mackerel.get_host("<hostId>")
 
 * Get host(s) information from hostname or service, role.
 ```
-mkr host info [--name foo] [--service service] [--role role]
+mkr.rb host info [--name foo] [--service service] [--role role]
 ```
 
 * Set status of a host
 ```
-mkr host status --host-id foo --status working
+mkr.rb host status --host-id foo --status working
 ```
 
 * Retire a host
 ```
-mkr host retire --host-id foo
+mkr.rb host retire --host-id foo
 ```
 
 * Get status of a host (not implemented yet)
 ```
-mkr host status --host-id foo
+mkr.rb host status --host-id foo
 ```
+
+Note: CLI command name has been changed to `mkr.rb` from 0.0.7.
+Primary CLI `mkr` is implemented in Go (https://github.com/mackerelio/mkr).
 
 ## Authentication
 ```
