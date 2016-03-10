@@ -256,6 +256,63 @@ describe Mackerel::Client do
     end
   end
 
+  describe '#define_graphs' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:api_path) { '/api/v0/graph-defs/create' }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    let(:defs) { [
+      {
+        name: 'custom.fish-catch',
+        displayName: 'My fish catch',
+        unit: 'integer',
+        metrics: [
+          {
+            name: 'custom.fish-catch.mackerel',
+            displayName: 'Mackerel',
+            isStacked: false,
+          },
+          {
+            name: 'custom.fish-catch.herring',
+            displayName: 'Herring',
+            isStacked: false,
+          },
+          {
+            name: 'custom.fish-catch.salmon',
+            displayName: 'Salmon',
+            isStacked: false,
+          },
+        ]
+      }
+    ] }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully post metrics" do
+      expect(client.define_graphs(defs)).to eq(response_object)
+    end
+  end
+
   describe '#get_hosts' do
     let(:stubbed_response) {
       [
