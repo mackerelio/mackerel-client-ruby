@@ -15,6 +15,20 @@ module Mackerel
       @api_key = args[:mackerel_api_key] || raise(ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
     end
 
+    def post_host(host)
+      response = client.post "/api/v0/hosts" do |req|
+        req.headers['X-Api-Key'] = @api_key
+        req.headers['Content-Type'] = 'application/json'
+        req.body = host.to_json
+      end
+
+      unless response.success?
+        raise "POST /api/v0/hosts failed: #{response.status}"
+      end
+
+      data = JSON.parse(response.body)
+    end
+
     def get_host(host_id)
       response = client.get "/api/v0/hosts/#{host_id}" do |req|
         req.headers['X-Api-Key'] = @api_key

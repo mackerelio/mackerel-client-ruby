@@ -13,6 +13,47 @@ describe Mackerel::Client do
     end
   end
 
+  describe '#post_host' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { '/api/v0/hosts' }
+
+    let(:host) {
+      {
+        'name' => 'host001',
+        'meta' => {},
+      }
+    }
+
+    let(:response_object) {
+      { 'id' => hostId }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully post host" do
+      expect(client.post_host(host)).to eq(response_object)
+    end
+  end
+
   describe '#get_host' do
     let(:stubbed_response) {
       [
