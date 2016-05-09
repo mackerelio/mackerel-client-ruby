@@ -104,6 +104,20 @@ module Mackerel
       data = JSON.parse(response.body)
     end
 
+    def define_graphs(graph_defs)
+      response = client.post '/api/v0/graph-defs/create' do |req|
+        req.headers['X-Api-Key'] = @api_key
+        req.headers['Content-Type'] = 'application/json'
+        req.body = graph_defs.to_json
+      end
+
+      unless response.success?
+        raise "POST /api/v0/graph-defs/create failed: #{res.status} #{res.body}"
+      end
+
+      JSON.parse(response.body)
+    end
+
     def get_hosts(opts = {})
       response = client.get '/api/v0/hosts.json' do |req|
         req.headers['X-Api-Key'] = @api_key
