@@ -11,8 +11,10 @@ module Mackerel
     ERROR_MESSAGE_FOR_API_KEY_ABSENCE = "API key is absent. Set your API key in a environment variable called MACKEREL_APIKEY."
 
     def initialize(args = {})
-      @origin  = args[:mackerel_origin] || 'https://mackerel.io'
-      @api_key = args[:mackerel_api_key] || raise(ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
+      @origin       = args[:mackerel_origin]  || 'https://mackerel.io'
+      @api_key      = args[:mackerel_api_key] || raise(ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
+      @timeout      = args[:timeout]          || 30 # Ref: apiRequestTimeout at mackerel-agent
+      @open_timeout = args[:open_timeout]     || 30 # Ref: apiRequestTimeout at mackerel-agent
     end
 
     def post_host(host)
@@ -160,8 +162,8 @@ module Mackerel
         faraday.response :logger if ENV['DEBUG']
         faraday.adapter Faraday.default_adapter
         faraday.options.params_encoder = Faraday::FlatParamsEncoder
-        faraday.options.timeout        = 30 # Ref: apiRequestTimeout at mackerel-agent
-        faraday.options.open_timeout   = 30 # Ref: apiRequestTimeout at mackerel-agent
+        faraday.options.timeout        = @timeout
+        faraday.options.open_timeout   = @open_timeout
       end
     end
 
