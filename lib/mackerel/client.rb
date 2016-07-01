@@ -160,6 +160,8 @@ module Mackerel
         faraday.response :logger if ENV['DEBUG']
         faraday.adapter Faraday.default_adapter
         faraday.options.params_encoder = Faraday::FlatParamsEncoder
+        faraday.options.timeout        = 30 # Ref: apiRequestTimeout at mackerel-agent
+        faraday.options.open_timeout   = 30 # Ref: apiRequestTimeout at mackerel-agent
       end
     end
 
