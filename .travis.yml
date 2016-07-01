@@ -3,6 +3,7 @@ before_install:
   # https://github.com/travis-ci/travis-ci/issues/3531
   - gem install bundler # -v 1.7.14 if a specific version is needed
 rvm:
+  - "2.2"
   - "2.1.1"
   - "2.0.0"
   - "1.9.3"
