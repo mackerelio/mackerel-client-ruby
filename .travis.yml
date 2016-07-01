@@ -1,5 +1,7 @@
 language: ruby
-before_install: gem install bundler -v 1.11.2
+before_install:
+  # https://github.com/travis-ci/travis-ci/issues/3531
+  - gem install bundler # -v 1.7.14 if a specific version is needed
 rvm:
   - "2.1.1"
   - "2.0.0"
