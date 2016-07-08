@@ -135,7 +135,7 @@ module Mackerel
     end
 
     def get_hosts(opts = {})
-      response = client.get '/api/v0/hosts.json' do |req|
+      response = client.get '/api/v0/hosts' do |req|
         req.headers['X-Api-Key'] = @api_key
         req.params['service']    = opts[:service] if opts[:service]
         req.params['role']       = opts[:roles]   if opts[:roles]
@@ -144,7 +144,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "GET /api/v0/hosts.json failed: #{response.status}"
+        raise "GET /api/v0/hosts failed: #{response.status}"
       end
 
       data = JSON.parse(response.body)
