@@ -373,7 +373,7 @@ describe Mackerel::Client do
 
     let(:hostId) { '21obeF4PhZN' }
 
-    let(:api_path) { "/api/v0/hosts.json" }
+    let(:api_path) { "/api/v0/hosts" }
 
     let(:hosts) {
       [
