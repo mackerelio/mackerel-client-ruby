@@ -34,6 +34,10 @@ module Mackerel
       return @hash
     end
 
+    def to_json
+      return to_h.to_json
+    end
+
   end
 
   class Client
