@@ -5,7 +5,6 @@ module Mackerel
     attr_accessor :id, :type, :name, :duration, :metric, :url, :service, :maxCheckAttempts, :operator, :warning, :critical, :responseTimeWarning, :responseTimeCritical, :responseTimeDuration, :certificationExpirationWarning, :certificationExpirationCritical, :containsString, :expression, :notificationInterval, :scopes, :excludeScopes, :isMute
 
     def initialize(args = {})
-      @hash                            = args
       @id                              = args["id"]
       @type                            = args["type"]
       @name                            = args["name"]
@@ -31,7 +30,11 @@ module Mackerel
     end
 
     def to_h
-      return @hash
+      instance_variables.flat_map do |name|
+        respond_to?(name[1..-1]) ? [name[1..-1]] : []
+      end.each_with_object({}) do |name, hash| 
+        hash[name] = public_send(name)
+      end.delete_if { |key, val| val == nil }
     end
 
     def to_json
