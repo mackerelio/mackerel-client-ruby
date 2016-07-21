@@ -35,8 +35,6 @@ describe Mackerel::Client do
         'warning' => 4,
         'critical' => 6,
         'notificationInterval' => 600,
-        'scopes' => nil,
-        'excludeScopes' => nil,
         'isMute' => false,
       )
     }
@@ -85,8 +83,6 @@ describe Mackerel::Client do
           'warning' => 4,
           'critical' => 6,
           'notificationInterval' => 600,
-          'scopes' => nil,
-          'excludeScopes' => nil,
           'isMute' => false,
         },
         {
@@ -100,8 +96,6 @@ describe Mackerel::Client do
           'warning' => 40.0,
           'critical' => 60.0,
           'notificationInterval' => 600,
-          'scopes' => nil,
-          'excludeScopes' => nil,
           'isMute' => false,
         },
         {
@@ -155,8 +149,6 @@ describe Mackerel::Client do
         'warning' => 4,
         'critical' => 6,
         'notificationInterval' => 600,
-        'scopes' => nil,
-        'excludeScopes' => nil,
         'isMute' => false,
       )
     }
@@ -206,8 +198,6 @@ describe Mackerel::Client do
         'warning' => 4,
         'critical' => 6,
         'notificationInterval' => 600,
-        'scopes' => nil,
-        'excludeScopes' => nil,
         'isMute' => false,
       )
     }
