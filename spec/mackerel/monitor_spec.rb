@@ -26,7 +26,7 @@ describe Mackerel::Client do
     let(:api_path) { '/api/v0/monitors' }
 
     let(:monitor) {
-      {
+      Mackerel::Monitor.new(
         'type' => 'host',
         'name' => 'monitor001',
         'duration' => 5,
@@ -38,11 +38,11 @@ describe Mackerel::Client do
         'scopes' => nil,
         'excludeScopes' => nil,
         'isMute' => false,
-      }
+      )
     }
 
     let(:response_object) {
-      Mackerel::Monitor.new(monitor.merge('id' => 'sgyzowm'))
+      Mackerel::Monitor.new(monitor.to_h.merge('id' => 'sgyzowm'))
     }
 
     before do
@@ -146,7 +146,7 @@ describe Mackerel::Client do
     let(:api_path) { "/api/v0/monitors/#{monitorId}" }
 
     let(:monitor) {
-      {
+      Mackerel::Host.new(
         'type' => 'host',
         'name' => 'monitor001',
         'duration' => 5,
@@ -158,7 +158,7 @@ describe Mackerel::Client do
         'scopes' => nil,
         'excludeScopes' => nil,
         'isMute' => false,
-      }
+      )
     }
 
     let(:response_object) {
@@ -196,7 +196,7 @@ describe Mackerel::Client do
     let(:api_path) { "/api/v0/monitors/#{monitorId}" }
 
     let(:monitor) {
-      {
+      Mackerel::Monitor.new(
         'id' => monitorId,
         'type' => 'host',
         'name' => 'monitor001',
@@ -209,11 +209,11 @@ describe Mackerel::Client do
         'scopes' => nil,
         'excludeScopes' => nil,
         'isMute' => false,
-      }
+      )
     }
 
     let(:response_object) {
-      Mackerel::Monitor.new(monitor)
+      monitor
     }
 
     before do
