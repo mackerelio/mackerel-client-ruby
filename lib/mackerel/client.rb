@@ -128,7 +128,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/graph-defs/create failed: #{res.status} #{res.body}"
+        raise "POST /api/v0/graph-defs/create failed: #{response.status} #{response.body}"
       end
 
       JSON.parse(response.body)
