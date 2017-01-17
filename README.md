@@ -9,6 +9,26 @@ mackerel-client is a ruby library to access Mackerel (https://mackerel.io/). CLI
 host = @mackerel.get_host("<hostId>")
 ```
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'mackerel-client'
+```
+
+And then execute:
+
+```sh
+bundle
+```
+
+Or install it yourself as:
+
+```sh
+gem install mackerel-client
+```
+
 # CLI
 
 ## Host
