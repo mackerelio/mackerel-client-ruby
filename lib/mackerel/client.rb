@@ -151,6 +151,20 @@ module Mackerel
       data['hosts'].map{ |host_json| Host.new(host_json) }
     end
 
+    def post_graph_annotation(annotation)
+      response = client.post '/api/v0/graph-annotations' do |req|
+        req.headers['X-Api-Key'] = @api_key
+        req.headers['Content-Type'] = 'application/json'
+        req.body = annotation.to_json
+      end
+
+      unless response.success?
+        raise "POST /api/v0/graph-annotations failed: #{response.status} #{response.body}"
+      end
+
+      JSON.parse(response.body)
+    end
+
     private
 
     def client

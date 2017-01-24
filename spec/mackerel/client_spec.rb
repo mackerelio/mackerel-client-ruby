@@ -414,4 +414,47 @@ describe Mackerel::Client do
       expect(client.get_hosts(opts).map(&:to_h)).to eq(hosts.map(&:to_h))
     end
   end
+
+  describe '#post_graph_annotation' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.post(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:api_path) { '/api/v0/graph-annotations' }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    let(:annotation) {
+      {
+        service: 'myService',
+        role: ['role1', 'role2'],
+        from: 123456,
+        to: 123457,
+        title: 'Some event',
+        description: 'Something happend!'
+      }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully post annotations" do
+      expect(client.post_graph_annotation(annotation)).to eq(response_object)
+    end
+  end
 end
