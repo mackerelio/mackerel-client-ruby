@@ -435,7 +435,15 @@ describe Mackerel::Client do
     let(:api_path) { '/api/v0/graph-annotations' }
 
     let(:response_object) {
-      { 'success' => true }
+      {
+        'id' => 'XXX',
+        'service' => 'myService',
+        'role' => ['role1', 'role2'],
+        'from' => 123456,
+        'to' => 123457,
+        'title' => 'Some event',
+        'description' => 'Something happend!'
+      }
     }
 
     let(:annotation) {
