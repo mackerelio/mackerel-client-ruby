@@ -438,7 +438,7 @@ describe Mackerel::Client do
       {
         'id' => 'XXX',
         'service' => 'myService',
-        'role' => ['role1', 'role2'],
+        'roles' => ['role1', 'role2'],
         'from' => 123456,
         'to' => 123457,
         'title' => 'Some event',
@@ -449,7 +449,7 @@ describe Mackerel::Client do
     let(:annotation) {
       {
         service: 'myService',
-        role: ['role1', 'role2'],
+        roles: ['role1', 'role2'],
         from: 123456,
         to: 123457,
         title: 'Some event',
