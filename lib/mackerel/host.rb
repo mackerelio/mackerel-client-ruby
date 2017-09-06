@@ -3,20 +3,21 @@ module Mackerel
   class Host
 
     MACKEREL_INTERFACE_NAME_PATTERN = /^eth\d/
-    attr_accessor :name, :type, :status, :memo, :isRetired, :id, :createdAt, :roles, :interfaces
+    attr_accessor :name, :type, :status, :memo, :isRetired, :id, :createdAt, :roles, :interfaces, :customIdentifier
 
     def initialize(args = {})
-      @hash       = args
-      @name       = args["name"]
-      @meta       = args["meta"]
-      @type       = args["type"]
-      @status     = args["status"]
-      @memo       = args["memo"]
-      @isRetired  = args["isRetired"]
-      @id         = args["id"]
-      @createdAt  = args["createdAt"]
-      @roles      = args["roles"]
-      @interfaces = args["interfaces"]
+      @hash             = args
+      @name             = args["name"]
+      @meta             = args["meta"]
+      @type             = args["type"]
+      @status           = args["status"]
+      @memo             = args["memo"]
+      @isRetired        = args["isRetired"]
+      @id               = args["id"]
+      @createdAt        = args["createdAt"]
+      @roles            = args["roles"]
+      @interfaces       = args["interfaces"]
+      @customIdentifier = args["customIdentifier"]
     end
 
     def ip_addr

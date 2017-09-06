@@ -137,10 +137,11 @@ module Mackerel
     def get_hosts(opts = {})
       response = client.get '/api/v0/hosts' do |req|
         req.headers['X-Api-Key'] = @api_key
-        req.params['service']    = opts[:service] if opts[:service]
-        req.params['role']       = opts[:roles]   if opts[:roles]
-        req.params['name']       = opts[:name]    if opts[:name]
-        req.params['status']     = opts[:status]  if opts[:status]
+        req.params['service']          = opts[:service]          if opts[:service]
+        req.params['role']             = opts[:roles]            if opts[:roles]
+        req.params['name']             = opts[:name]             if opts[:name]
+        req.params['status']           = opts[:status]           if opts[:status]
+        req.params['customIdentifier'] = opts[:customIdentifier] if opts[:customIdentifier]
       end
 
       unless response.success?
