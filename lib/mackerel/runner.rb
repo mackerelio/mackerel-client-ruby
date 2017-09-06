@@ -88,6 +88,7 @@ module Mackerel
         opt.on('--role ROLE')      {|v| params[:roles] = v }
         opt.on('--name NAME')      {|v| params[:name] = v }
         opt.on('--host-id HOSTID') {|v| params[:hostId] = v }
+        opt.on('--custom-identifier IDENTIFIER') {|v| params[:customIdentifier] = v }
         opt.parse!(args)
         begin
           if params[:hostid]
