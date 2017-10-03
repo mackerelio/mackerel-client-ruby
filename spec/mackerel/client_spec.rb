@@ -465,4 +465,141 @@ describe Mackerel::Client do
       expect(client.post_graph_annotation(annotation)).to eq(response_object)
     end
   end
+
+  describe '#list_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:host_id) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata" }
+
+    let(:response_object) {
+      {
+        'metadata' => [
+          { 'namespace' => 'namespace1' },
+          { 'namespace' => 'namespace2' }
+        ]
+      }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it 'successfully gets metadata namespaces' do
+      expect(client.list_metadata(host_id)).to eq(response_object)
+    end
+  end
+
+  describe '#get_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:host_id) { '21obeF4PhZN' }
+
+    let(:namespace) { 'namespace' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata/#{namespace}" }
+
+    let(:response_object) {
+      {
+        'type' => 12345,
+        'region' => 'jp',
+        'env' => 'staging',
+        'instance_type' => 'c4.xlarge'
+      }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it 'successfully gets metadata' do
+      expect(client.get_metadata(host_id, namespace)).to eq(response_object)
+    end
+  end
+
+  describe '#update_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.put(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:host_id) { '21obeF4PhZN' }
+
+    let(:namespace) { 'namespace' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata/#{namespace}" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    let(:metadata) {
+      {
+        'type' => 12345,
+        'region' => 'jp',
+        'env' => 'staging',
+        'instance_type' => 'c4.xlarge'
+      }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it 'successfully updates metadata' do
+      expect(client.update_metadata(host_id, namespace, metadata)).to eq(response_object)
+    end
+  end
+
+  describe '#delete_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.delete(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:host_id) { '21obeF4PhZN' }
+
+    let(:namespace) { 'namespace' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata/#{namespace}" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it 'successfully updates metadata' do
+      expect(client.delete_metadata(host_id, namespace)).to eq(response_object)
+    end
+  end
 end
