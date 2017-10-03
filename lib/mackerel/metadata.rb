@@ -34,7 +34,7 @@ module Mackerel
       end
 
       unless response.success?
-        raise "POST /api/v0/hosts/#{host_id}/metadata/#{namespace} failed: #{response.status} #{response.body}"
+        raise "PUT /api/v0/hosts/#{host_id}/metadata/#{namespace} failed: #{response.status} #{response.body}"
       end
 
       JSON.parse(response.body)
