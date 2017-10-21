@@ -30,7 +30,7 @@ describe Mackerel::Client do
         "services" => [
           {
             "name" => "Web",
-            "memo" => "ストア",
+            "memo" => "store",
             "roles" => [
               "normal role",
               "special role"
@@ -38,7 +38,7 @@ describe Mackerel::Client do
           },
           {
              "name" => "Web",
-             "memo" => "ストア",
+             "memo" => "store",
              "roles" => [
                "a role",
                "the role"
