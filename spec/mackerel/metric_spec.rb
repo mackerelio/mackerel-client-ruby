@@ -86,7 +86,7 @@ describe Mackerel::Client do
     end
 
     it "successfully get host metrics" do
-      expect(client.get_host_metrics(hostId, metric_name, from, to).map(&:to_h)).to eq(response_object["metrics"])
+      expect(client.get_host_metrics(hostId, metric_name, from, to)).to eq(response_object["metrics"])
     end
   end
 

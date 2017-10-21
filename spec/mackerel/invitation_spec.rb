@@ -43,7 +43,7 @@ describe Mackerel::Client do
     end
 
     it "successfully post invitation" do
-      expect(client.post_invitation(email, authority).to_h).to eq(response_object)
+      expect(client.post_invitation(email, authority)).to eq(response_object)
     end
   end
 
@@ -86,7 +86,7 @@ describe Mackerel::Client do
     end
 
     it "successfully revoke invitation" do
-      expect(client.revoke_invitation(email).to_h).to eq(invitation.merge({ "expiresAt" => 1492393387 }))
+      expect(client.revoke_invitation(email)).to eq(invitation.merge({ "expiresAt" => 1492393387 }))
     end
   end
 
