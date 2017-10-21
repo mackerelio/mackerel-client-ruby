@@ -22,57 +22,57 @@ module Mackerel
   module REST
     module Metric
       def post_metrics(metrics)
-        order = ApiOrder.new(:post, '/api/v0/tsdb')
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = metrics.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, '/api/v0/tsdb')
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = metrics.to_json
+        data = command.execute(client)
       end
 
       def get_host_metrics(host_id, name, from, to)
-        order = ApiOrder.new(:get, "/api/v0/hosts/#{host_id}/metrics")
-        order.headers['X-Api-Key'] = @api_key
-        order.params['name'] = name
-        order.params['from'] = from
-        order.params['to'] = to
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/hosts/#{host_id}/metrics")
+        command.headers['X-Api-Key'] = @api_key
+        command.params['name'] = name
+        command.params['from'] = from
+        command.params['to'] = to
+        data = command.execute(client)
         data["metrics"]
       end
 
       def get_latest_host_metrics(host_id, name)
-        order = ApiOrder.new(:get, "/api/v0/tsdb/latest")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.params['hostId'] = host_id 
-        order.params['name'] = name
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/tsdb/latest")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.params['hostId'] = host_id 
+        command.params['name'] = name
+        data = command.execute(client)
         data["tsdbLatest"]
       end
 
       def post_service_metrics(service_name, metrics)
-        order = ApiOrder.new(:post, "/api/v0/services/#{service_name}/tsdb")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = metrics.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, "/api/v0/services/#{service_name}/tsdb")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = metrics.to_json
+        data = command.execute(client)
       end
 
       def get_service_metrics(service_name, name, from, to)
-        order = ApiOrder.new(:get, "/api/v0/services/#{service_name}/metrics")
-        order.headers['X-Api-Key'] = @api_key
-        order.params['name'] = name
-        order.params['from'] = from
-        order.params['to'] = to
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/services/#{service_name}/metrics")
+        command.headers['X-Api-Key'] = @api_key
+        command.params['name'] = name
+        command.params['from'] = from
+        command.params['to'] = to
+        data = command.execute(client)
         data["metrics"]
       end
 
       def define_graphs(graph_defs)
-        order = ApiOrder.new(:post, '/api/v0/graph-defs/create')
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = graph_defs.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, '/api/v0/graph-defs/create')
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = graph_defs.to_json
+        data = command.execute(client)
       end
     end
   end

@@ -432,15 +432,8 @@ describe Mackerel::Client do
     end
   end
 
-
-  describe '#get_host_metadata' do
-    let(:stubbed_response) {
-      [
-        200,
-        {},
-        JSON.dump(response_object)
-      ]
-    }
+  describe '#list_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
 
     let(:test_client) {
       Faraday.new do |builder|
@@ -450,90 +443,65 @@ describe Mackerel::Client do
       end
     }
 
-    let(:hostId) { '21obeF4PhZN' }
-    let(:namespace) { 'ec2instance' }
+    let(:host_id) { '21obeF4PhZN' }
 
-    let(:api_path) { "/api/v0/hosts/#{hostId}/metadata/#{namespace}" }
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata" }
 
-    let(:metadata) {
+    let(:response_object) {
       {
-        "ec2instance" => {
-          "type" => "m4.xlarge",
-          "instance-id" => "i-123456789101",
-          "region" => "ap-northeast-1",
-          "az" => "a"
-        }
-      }
-    }
-
-    let(:response_object){
-      metadata
-    }
-
-    before do
-      allow(client).to receive(:http_client).and_return(test_client)
-    end
-
-    it "successfully get host metadata" do
-      expect(client.get_host_metadata(hostId, namespace)).to eq(metadata)
-    end
-  end
-
-
-  describe '#list_host_metadata' do
-    let(:stubbed_response) {
-      [
-        200,
-        {},
-        JSON.dump(response_object)
-      ]
-    }
-
-    let(:test_client) {
-      Faraday.new do |builder|
-        builder.adapter :test do |stubs|
-          stubs.get(api_path) { stubbed_response }
-        end
-      end
-    }
-
-    let(:hostId) { '21obeF4PhZN' }
-
-    let(:api_path) { "/api/v0/hosts/#{hostId}/metadata" }
-
-    let(:metadata) {
-      {
-        "metadata" => [
-          { "namespace" => "ec2instance"},
-          { "namespace" => "mackerel-agent"},
-          { "namespace" => "td-agent"},
-          { "namespace" => "role"}
+        'metadata' => [
+          { 'namespace' => 'namespace1' },
+          { 'namespace' => 'namespace2' }
         ]
       }
     }
 
-    let(:response_object){
-      metadata
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it 'successfully gets metadata namespaces' do
+      expect(client.list_metadata(host_id)).to eq(response_object)
+    end
+  end
+
+  describe '#get_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:host_id) { '21obeF4PhZN' }
+
+    let(:namespace) { 'namespace' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata/#{namespace}" }
+
+    let(:response_object) {
+      {
+        'type' => 12345,
+        'region' => 'jp',
+        'env' => 'staging',
+        'instance_type' => 'c4.xlarge'
+      }
     }
 
     before do
       allow(client).to receive(:http_client).and_return(test_client)
     end
 
-    it "successfully list host metadata" do
-      expect(client.list_host_metadata(hostId)).to eq(metadata['metadata'])
+    it 'successfully gets metadata' do
+      expect(client.get_metadata(host_id, namespace)).to eq(response_object)
     end
   end
 
-
-  describe '#put_host_metadata' do
-    let(:stubbed_response) {
-      [
-        200,
-        {},
-        JSON.dump(response_object)
-      ]
-    }
+  describe '#update_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
 
     let(:test_client) {
       Faraday.new do |builder|
@@ -543,44 +511,36 @@ describe Mackerel::Client do
       end
     }
 
-    let(:hostId) { '21obeF4PhZN' }
+    let(:host_id) { '21obeF4PhZN' }
 
-    let(:api_path) { "/api/v0/hosts/#{hostId}/metadata/#{namespace}" }
-    let(:namespace) { 'ec2instance' }
+    let(:namespace) { 'namespace' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata/#{namespace}" }
+
+    let(:response_object) {
+      { 'success' => true }
+    }
 
     let(:metadata) {
       {
-        namespace => {
-          "type" => "m4.xlarge",
-          "instance-id" => "i-123456789101",
-          "region" => "ap-northeast-1",
-          "az" => "a"
-        }
+        'type' => 12345,
+        'region' => 'jp',
+        'env' => 'staging',
+        'instance_type' => 'c4.xlarge'
       }
-    }
-
-    let(:response_object){
-      {"success" => true}
     }
 
     before do
       allow(client).to receive(:http_client).and_return(test_client)
     end
 
-    it "successfully put host metadata" do
-      expect(client.put_host_metadata(hostId, namespace, metadata)).to eq({"success" => true})
+    it 'successfully updates metadata' do
+      expect(client.update_metadata(host_id, namespace, metadata)).to eq(response_object)
     end
   end
 
-
-  describe '#delete_host_metadata' do
-    let(:stubbed_response) {
-      [
-        200,
-        {},
-        JSON.dump(response_object)
-      ]
-    }
+  describe '#delete_metadata' do
+    let(:stubbed_response) { [200, {}, JSON.dump(response_object)] }
 
     let(:test_client) {
       Faraday.new do |builder|
@@ -590,21 +550,22 @@ describe Mackerel::Client do
       end
     }
 
-    let(:hostId) { '21obeF4PhZN' }
-    let(:namespace) { 'ec2instance' }
-    let(:api_path) { "/api/v0/hosts/#{hostId}/metadata/#{namespace}" }
-    let(:response_object){
-      {"success" => true}
+    let(:host_id) { '21obeF4PhZN' }
+
+    let(:namespace) { 'namespace' }
+
+    let(:api_path) { "/api/v0/hosts/#{host_id}/metadata/#{namespace}" }
+
+    let(:response_object) {
+      { 'success' => true }
     }
 
     before do
       allow(client).to receive(:http_client).and_return(test_client)
     end
 
-    it "successfully delete host metadata" do
-      expect(client.delete_host_metadata(hostId, namespace)).to eq({"success" => true})
+    it 'successfully updates metadata' do
+      expect(client.delete_metadata(host_id, namespace)).to eq(response_object)
     end
   end
-
-
 end

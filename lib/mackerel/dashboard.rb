@@ -28,50 +28,50 @@ module Mackerel
   module REST
     module Dashboard
       def post_dashboard(title, markdown, urlPath)
-        order = ApiOrder.new(:post, '/api/v0/dashboards')
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = {
+        command = ApiCommand.new(:post, '/api/v0/dashboards')
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = {
             title: title,
             bodyMarkdown: markdown,
             urlPath: urlPath
         }.to_json
-        data = order.execute(client)
+        data = command.execute(client)
         Mackerel::Dashboard.new(data)
       end
   
       def update_dashboard(dashboardId, title, markdown, urlPath)
-        order = ApiOrder.new(:put, "/api/v0/dashboards/#{dashboardId}")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = {
+        command = ApiCommand.new(:put, "/api/v0/dashboards/#{dashboardId}")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = {
             title: title,
             bodyMarkdown: markdown,
             urlPath: urlPath
         }.to_json
-        data = order.execute(client)
+        data = command.execute(client)
         Mackerel::Dashboard.new(data)
       end
   
       def get_dashboards()
-        order = ApiOrder.new(:get, '/api/v0/dashboards')
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, '/api/v0/dashboards')
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         data['dashboards'].map{ |d| Mackerel::Dashboard.new(d) }
       end
   
       def get_dashboard(dashboardId)
-        order = ApiOrder.new(:get, "/api/v0/dashboards/#{dashboardId}")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/dashboards/#{dashboardId}")
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         Mackerel::Dashboard.new(data)
       end
   
       def delete_dashboard(dashboardId)
-        order = ApiOrder.new(:delete, "/api/v0/dashboards/#{dashboardId}")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        data = order.execute(client)
+        command = ApiCommand.new(:delete, "/api/v0/dashboards/#{dashboardId}")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        data = command.execute(client)
         Mackerel::Dashboard.new(data)
       end
     end

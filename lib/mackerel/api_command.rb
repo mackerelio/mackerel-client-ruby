@@ -2,7 +2,7 @@ require 'cgi'
 require 'pp'
 
 module Mackerel
-  class ApiOrder
+  class ApiCommand
     METHODS = [:get, :delete, :put, :post]
 
     attr_accessor :headers, :body, :params, :query

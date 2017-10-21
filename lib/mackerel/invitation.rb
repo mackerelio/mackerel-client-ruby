@@ -5,22 +5,22 @@ module Mackerel
   module REST
     module Invitation
       def post_invitation(email, authority)
-        order = ApiOrder.new(:post, '/api/v0/invitations')
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = { 
+        command = ApiCommand.new(:post, '/api/v0/invitations')
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = { 
           email: email.to_s,
           authority: authority.to_s
         }.to_json
-        data = order.execute(client)
+        data = command.execute(client)
       end
   
       def revoke_invitation(email)
-        order = ApiOrder.new(:post, '/api/v0/invitations/revoke')
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = { email: email.to_s }.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, '/api/v0/invitations/revoke')
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = { email: email.to_s }.to_json
+        data = command.execute(client)
       end
     end
   end

@@ -32,18 +32,18 @@ module Mackerel
   module REST
     module Alert
       def get_alerts()
-        order = ApiOrder.new(:get, "/api/v0/alerts")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/alerts")
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         data["alerts"].map { |a| Mackerel::Alert.new(a) }
       end
 
       def close_alert(alertId, reason)
-        order = ApiOrder.new(:post, "/api/v0/alerts/#{alertId}/close")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = { reason: reason.to_s }.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, "/api/v0/alerts/#{alertId}/close")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = { reason: reason.to_s }.to_json
+        data = command.execute(client)
         Mackerel::Alert.new(data)
       end
     end

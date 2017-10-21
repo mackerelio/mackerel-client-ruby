@@ -1,8 +1,10 @@
 module Mackerel
-  class Organization
-    attr_accessor :name
+  class Channel
+    attr_accessor :id, :name, :type
     def initialize(args = {})
+      @id                 = args["id"]
       @name               = args["name"]
+      @type               = args["type"]
     end
 
     def to_h
@@ -16,20 +18,17 @@ module Mackerel
     def to_json(options = nil)
       return to_h.to_json(options)
     end
-
   end
 
   module REST
-    module Organization
-
-      def get_organization()
-        command = ApiCommand.new(:get, '/api/v0/org')
+    module Channel
+      def get_channels()
+        command = ApiCommand.new(:get, '/api/v0/channels')
         command.headers['X-Api-Key'] = @api_key
         command.headers['Content-Type'] = 'application/json'
         data = command.execute(client)
-        Mackerel::Organization.new(data)
+        data['channels'].map{|d| Mackerel::Channel.new(d) }
       end
-
     end
   end
 end

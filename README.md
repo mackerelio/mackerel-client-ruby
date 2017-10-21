@@ -14,7 +14,7 @@ host = @mackerel.get_host("<hostId>")
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'mackerel-client', path '/path/to/dir'
+gem 'mackerel-client'
 ```
 
 And then execute:
@@ -23,11 +23,11 @@ And then execute:
 bundle
 ```
 
+Or install it yourself as:
 ## Service
-
-* List Services \[GET /api/v0/services\]
-```
-mkr.rb service list
+ 
+```sh
+gem install mackerel-client
 ```
 
 # CLI

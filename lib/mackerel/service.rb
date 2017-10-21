@@ -28,23 +28,23 @@ module Mackerel
     module Service
 
       def get_services()
-        order = ApiOrder.new(:get, '/api/v0/services')
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, '/api/v0/services')
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         data['services'].map {|s| Mackerel::Service.new(s) }
       end
 
       def get_roles(serviceName)
-        order = ApiOrder.new(:get, "/api/v0/services/#{serviceName}/roles")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/services/#{serviceName}/roles")
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         data['roles'].map {|s| Mackerel::Role.new(s) }
       end
 
       def get_service_metric_names(serviceName)
-        order = ApiOrder.new(:get, "/api/v0/services/#{serviceName}/metric-names")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/services/#{serviceName}/metric-names")
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         data['names']
       end
 

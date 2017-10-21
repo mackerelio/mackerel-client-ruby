@@ -42,102 +42,74 @@ module Mackerel
     module Host
 
       def post_host(host)
-        order = ApiOrder.new(:post, "/api/v0/hosts")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = host.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, "/api/v0/hosts")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = host.to_json
+        data = command.execute(client)
       end
   
       def update_host(host_id, host)
-        order = ApiOrder.new(:put, "/api/v0/hosts/#{host_id}")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = host.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:put, "/api/v0/hosts/#{host_id}")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = host.to_json
+        data = command.execute(client)
       end
   
       def update_host_roles(host_id, roles)
         roles = [roles] if roles.is_a?(String)
-        order = ApiOrder.new(:put, "/api/v0/hosts/#{host_id}/role-fullnames")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = { "roleFullnames" => roles }.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:put, "/api/v0/hosts/#{host_id}/role-fullnames")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = { "roleFullnames" => roles }.to_json
+        data = command.execute(client)
       end
   
       def get_host(host_id)
-        order = ApiOrder.new(:get, "/api/v0/hosts/#{host_id}")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/hosts/#{host_id}")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        data = command.execute(client)
         Mackerel::Host.new(data['host'])
       end
-  
-      def get_host_metadata(host_id, namespace)
-        order = ApiOrder.new(:get, "/api/v0/hosts/#{host_id}/metadata/#{namespace}")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
-      end
-
-      def list_host_metadata(host_id)
-        order = ApiOrder.new(:get, "/api/v0/hosts/#{host_id}/metadata")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
-        data['metadata']
-      end
-  
+ 
       def update_host_status(host_id, status)
         unless [:standby, :working, :maintenance, :poweroff].include?(status.to_sym)
           raise "no such status: #{status}"
         end
   
-        order = ApiOrder.new(:post, "/api/v0/hosts/#{host_id}/status")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = { "status" => status }.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, "/api/v0/hosts/#{host_id}/status")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = { "status" => status }.to_json
+        data = command.execute(client)
       end
   
       def retire_host(host_id)
-        order = ApiOrder.new(:post, "/api/v0/hosts/#{host_id}/retire")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = { }.to_json
-        data = order.execute(client)
+        command = ApiCommand.new(:post, "/api/v0/hosts/#{host_id}/retire")
+        command.headers['X-Api-Key'] = @api_key
+        command.headers['Content-Type'] = 'application/json'
+        command.body = { }.to_json
+        data = command.execute(client)
       end
-  
-      def put_host_metadata(host_id, namespace, metadata)
-        order = ApiOrder.new(:put, "/api/v0/hosts/#{host_id}/metadata/#{namespace}")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        order.body = metadata.to_json
-        data = order.execute(client)
-      end
-  
+ 
       def get_hosts(opts = {})
-        order = ApiOrder.new(:get, '/api/v0/hosts')
-        order.headers['X-Api-Key'] = @api_key
-        order.params['service']    = opts[:service] if opts[:service]
-        order.params['role']       = opts[:roles]   if opts[:roles]
-        order.params['name']       = opts[:name]    if opts[:name]
-        order.params['status']     = opts[:status]  if opts[:status]
-        data = order.execute(client)
+        command = ApiCommand.new(:get, '/api/v0/hosts')
+        command.headers['X-Api-Key'] = @api_key
+        command.params['service']    = opts[:service] if opts[:service]
+        command.params['role']       = opts[:roles]   if opts[:roles]
+        command.params['name']       = opts[:name]    if opts[:name]
+        command.params['status']     = opts[:status]  if opts[:status]
+        data = command.execute(client)
         data['hosts'].map{ |host_json| Mackerel::Host.new(host_json) }
       end
   
       def get_host_metric_names(host_id)
-        order = ApiOrder.new(:get, "/api/v0/hosts/#{host_id}/metric-names")
-        order.headers['X-Api-Key'] = @api_key
-        data = order.execute(client)
+        command = ApiCommand.new(:get, "/api/v0/hosts/#{host_id}/metric-names")
+        command.headers['X-Api-Key'] = @api_key
+        data = command.execute(client)
         data["names"]
-      end
-  
-      def delete_host_metadata(host_id, namespace)
-        order = ApiOrder.new(:delete, "/api/v0/hosts/#{host_id}/metadata/#{namespace}")
-        order.headers['X-Api-Key'] = @api_key
-        order.headers['Content-Type'] = 'application/json'
-        data = order.execute(client)
       end
     end
   end

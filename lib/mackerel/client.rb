@@ -14,7 +14,9 @@ require 'mackerel/invitation'
 require 'mackerel/organization'
 require 'mackerel/dashboard'
 require 'mackerel/metric'
-
+require 'mackerel/metadata'
+require 'mackerel/notification_group'
+require 'mackerel/channel'
 
 module Mackerel
   class Client
@@ -28,6 +30,9 @@ module Mackerel
     include Mackerel::REST::Organization
     include Mackerel::REST::Service
     include Mackerel::REST::User
+    include Mackerel::REST::Metadata
+    include Mackerel::REST::Channel
+    include Mackerel::REST::NotificationGroup
     
     def initialize(args = {})
       @origin       = args[:mackerel_origin]  || 'https://mackerel.io'
