@@ -14,7 +14,7 @@ module Mackerel
         }.to_json
         data = command.execute(client)
       end
-  
+
       def revoke_invitation(email)
         command = ApiCommand.new(:post, '/api/v0/invitations/revoke')
         command.headers['X-Api-Key'] = @api_key

@@ -24,8 +24,7 @@ bundle
 ```
 
 Or install it yourself as:
-## Service
- 
+
 ```sh
 gem install mackerel-client
 ```

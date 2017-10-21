@@ -12,7 +12,7 @@ module Mackerel
         command.headers['X-Api-Key'] = @api_key
         data = command.execute(client)
       end
- 
+
       def update_metadata(host_id, namespace, metadata)
         command = ApiCommand.new(:put, "/api/v0/hosts/#{host_id}/metadata/#{namespace}")
         command.headers['X-Api-Key'] = @api_key
@@ -20,7 +20,7 @@ module Mackerel
         command.body = metadata.to_json
         data = command.execute(client)
       end
- 
+
       def delete_metadata(host_id, namespace)
         command = ApiCommand.new(:delete, "/api/v0/hosts/#{host_id}/metadata/#{namespace}")
         command.headers['X-Api-Key'] = @api_key

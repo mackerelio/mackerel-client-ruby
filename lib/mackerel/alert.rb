@@ -19,7 +19,7 @@ module Mackerel
     def to_h
       instance_variables.flat_map do |name|
         respond_to?(name[1..-1]) ? [name[1..-1]] : []
-      end.each_with_object({}) do |name, hash| 
+      end.each_with_object({}) do |name, hash|
         hash[name] = public_send(name)
       end.delete_if { |key, val| val == nil }
     end
