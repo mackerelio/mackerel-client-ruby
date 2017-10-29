@@ -7,9 +7,11 @@ module Mackerel
 
     attr_accessor :headers, :body, :params, :query
 
-    def initialize(method, path)
+    def initialize(method, path, api_key, content_type = 'application/json')
       @path = path
       @method = method
+      @api_key = api_key
+      @content_type = content_type
 
       @headers = {}
       @body = ''
@@ -20,12 +22,14 @@ module Mackerel
     def execute(client)
       return unless METHODS.include?(@method)
 
-      request_path = make_escaped_path
+      request_path = @path
       request_path << "?#{make_escaped_query}" if @query.any?
 
       client_method = client.method(@method)
       response = client_method.call(request_path) do |req|
         req.headers = @headers
+        req.headers['x-api-key'] = @api_key
+        req.headers['Content-Type'] = @content_type
         req.params = @params
         req.body = @body
       end
@@ -59,8 +63,5 @@ module Mackerel
       @query.map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"}.join("&")
     end
 
-    def make_escaped_path
-      CGI.escape(@path).gsub('%2F', '/')
-    end
   end
 end

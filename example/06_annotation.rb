@@ -8,19 +8,19 @@ mc = Mackerel::Client.new(:mackerel_api_key => ENV['MACKEREL_APIKEY'])
 
 current_time = Time.now.to_i
 service = "website"
-pp mc.post_annotation({
+pp mc.post_graph_annotation({
   title: "First Annotation",
-  description: "Sinario Test Annotation",
+  description: "Senario Test Annotation",
   from: current_time - 6000,
   to: current_time - 60,
   service: service
 })
-pp annotation = mc.get_annotations(service, current_time - 6000, current_time).first
-pp mc.update_annotation(annotation.id, {
+pp annotation = mc.get_graph_annotations(service, current_time - 6000, current_time).first
+pp mc.update_graph_annotation(annotation.id, {
   title: "Second Annotation",
-  description: "Sinario Test Annotation",
+  description: "Senario Test Annotation",
   from: current_time - 6000,
   to: current_time - 60,
   service: service
 })
-pp mc.delete_annotation(annotation.id)
+pp mc.delete_graph_annotation(annotation.id)

@@ -6,7 +6,7 @@ describe Mackerel::Client do
   let(:api_key) { 'xxxxxxxx' }
   let(:client) { Mackerel::Client.new(:mackerel_api_key => api_key) }
 
-  describe '#post_annotation' do
+  describe '#post_graph_annotation' do
     let(:stubbed_response) {
       [
         200,
@@ -46,12 +46,12 @@ describe Mackerel::Client do
     end
 
     it "successfully post annotation" do
-      expect(client.post_annotation(annotation).to_h).to eq( annotation.merge({ 'id' => annotationId }) )
+      expect(client.post_graph_annotation(annotation).to_h).to eq( annotation.merge({ 'id' => annotationId }) )
     end
   end
 
 
-  describe '#get_annotations' do
+  describe '#get_graph_annotations' do
     let(:stubbed_response) {
       [
         200,
@@ -106,12 +106,12 @@ describe Mackerel::Client do
     end
 
     it "successfully get annotations" do
-      expect(client.get_annotations(service, from, to).map(&:to_h)).to eq(annotations['graphAnnotations'])
+      expect(client.get_graph_annotations(service, from, to).map(&:to_h)).to eq(annotations['graphAnnotations'])
     end
   end
 
 
-  describe '#update_annotation' do
+  describe '#update_graph_annotation' do
     let(:stubbed_response) {
       [
         200,
@@ -153,12 +153,12 @@ describe Mackerel::Client do
     end
 
     it "successfully update annotation" do
-      expect(client.update_annotation(id, annotation).to_h ).to eq(annotation.merge({"id" => id}))
+      expect(client.update_graph_annotation(id, annotation).to_h ).to eq(annotation.merge({"id" => id}))
     end
   end
 
 
-  describe '#delete_annotation' do
+  describe '#delete_graph_annotation' do
     let(:stubbed_response) {
       [
         200,
@@ -200,7 +200,7 @@ describe Mackerel::Client do
     end
 
     it "successfully delete annotation" do
-      expect(client.delete_annotation(id).to_h ).to eq(annotation.merge({"id" => id}))
+      expect(client.delete_graph_annotation(id).to_h ).to eq(annotation.merge({"id" => id}))
     end
   end
 

@@ -55,7 +55,7 @@ describe Mackerel::Client do
     end
   end
 
-  describe '#delete_users' do
+  describe '#remove_users' do
 
     let(:api_path) { "/api/v0/users/#{user_id}" }
     let(:stubbed_response) {
@@ -92,7 +92,7 @@ describe Mackerel::Client do
     end
 
     it "successfully delete users" do
-      expect(client.delete_user(user_id).to_h).to eq(user)
+      expect(client.remove_user(user_id).to_h).to eq(user)
     end
   end
  

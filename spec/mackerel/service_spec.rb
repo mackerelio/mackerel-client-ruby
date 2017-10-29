@@ -111,7 +111,7 @@ describe Mackerel::Client do
   end
 
 
-  describe '#get_service_metric_names' do
+  describe '#get_metric_names' do
 
     let(:api_path) { "/api/v0/services/#{serviceName}/metric-names" }
     let(:stubbed_response) {
@@ -148,7 +148,7 @@ describe Mackerel::Client do
     end
 
     it "successfully get services" do
-      expect(client.get_service_metric_names(serviceName)).to eq(metricNames['names'])
+      expect(client.get_metric_names(serviceName)).to eq(metricNames['names'])
     end
   end
 

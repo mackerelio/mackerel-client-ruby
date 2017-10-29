@@ -91,7 +91,7 @@ describe Mackerel::Client do
   end
 
 
-  describe "#get_latest_host_metrics" do
+  describe "#get_latest_metrics" do
     let(:stubbed_response) {
       [
        200,
@@ -129,7 +129,7 @@ describe Mackerel::Client do
     end
 
     it "successfully get latest metrics" do
-      expect(client.get_latest_host_metrics([hostId], [metric_name])).to eq(response_object["tsdbLatest"])
+      expect(client.get_latest_metrics([hostId], [metric_name])).to eq(response_object["tsdbLatest"])
     end
   end
 

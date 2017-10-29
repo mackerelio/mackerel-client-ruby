@@ -14,7 +14,7 @@ pp mc.post_monitoring_check_report({
     {
       name: "check-report-test",
       status: "OK",
-      message: "YOKERO! NAPPA",
+      message: "YOKERO!",
       occurredAt: current_time,
       source: {
         type: "host",

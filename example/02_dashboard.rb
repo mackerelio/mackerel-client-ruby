@@ -7,14 +7,14 @@ Dotenv.load
 mc = Mackerel::Client.new(:mackerel_api_key => ENV['MACKEREL_APIKEY'])
 
 # make a dashboard
-title = "Song of Anzu"
+title = "Dashboard Example"
 markdown = "
 # Inform to labors
 
-This is not a game or a concert.
-Motivation is Nothing.
+Working time is eight hour.
+May day is May first.
 "
-urlPath = "SongOfAnzu"
+urlPath = "DashboardExample"
 pp mc.post_dashboard(title, markdown, urlPath)
 
 # Update the dashboard

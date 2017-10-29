@@ -28,19 +28,15 @@ module Mackerel
 
   module REST
     module Annotation
-      def post_annotation(annotation)
-        command = ApiCommand.new(:post, '/api/v0/graph-annotations')
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+      def post_graph_annotation(annotation)
+        command = ApiCommand.new(:post, '/api/v0/graph-annotations', @api_key, @content_type)
         command.body = annotation.to_json
         data = command.execute(client)
         Mackerel::Annotation.new(data)
       end
 
-      def get_annotations(service, from, to)
-        command = ApiCommand.new(:get, '/api/v0/graph-annotations')
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+      def get_graph_annotations(service, from, to)
+        command = ApiCommand.new(:get, '/api/v0/graph-annotations', @api_key, @content_type)
         command.params['service'] = service
         command.params['from'] = from
         command.params['to'] = to
@@ -48,19 +44,15 @@ module Mackerel
         data['graphAnnotations'].map{|a| Mackerel::Annotation.new(a)}
       end
 
-      def update_annotation(annotation_id, annotation)
-        command = ApiCommand.new(:put, "/api/v0/graph-annotations/#{annotation_id}")
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+      def update_graph_annotation(annotation_id, annotation)
+        command = ApiCommand.new(:put, "/api/v0/graph-annotations/#{annotation_id}", @api_key, @content_type)
         command.body = annotation.to_json
         data = command.execute(client)
         Mackerel::Annotation.new(data)
       end
 
-      def delete_annotation(annotation_id)
-        command = ApiCommand.new(:delete, "/api/v0/graph-annotations/#{annotation_id}")
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+      def delete_graph_annotation(annotation_id)
+        command = ApiCommand.new(:delete, "/api/v0/graph-annotations/#{annotation_id}", @api_key, @content_type)
         data = command.execute(client)
         Mackerel::Annotation.new(data)
       end

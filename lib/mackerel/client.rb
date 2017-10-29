@@ -6,6 +6,7 @@ require 'json' unless defined? ::JSON
 require 'mackerel/role'
 require 'mackerel/host'
 require 'mackerel/monitor'
+require 'mackerel/monitoring'
 require 'mackerel/service'
 require 'mackerel/alert'
 require 'mackerel/annotation'
@@ -27,6 +28,7 @@ module Mackerel
     include Mackerel::REST::Invitation
     include Mackerel::REST::Metric
     include Mackerel::REST::Monitor
+    include Mackerel::REST::Monitoring
     include Mackerel::REST::Organization
     include Mackerel::REST::Service
     include Mackerel::REST::User
@@ -37,6 +39,7 @@ module Mackerel
     def initialize(args = {})
       @origin       = args[:mackerel_origin]  || 'https://api.mackerelio.com'
       @api_key      = args[:mackerel_api_key] || raise(ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
+      @content_type = args[:content_type]     || 'application/json'
       @timeout      = args[:timeout]          || 30 # Ref: apiRequestTimeout at mackerel-agent
       @open_timeout = args[:open_timeout]     || 30 # Ref: apiRequestTimeout at mackerel-agent
     end

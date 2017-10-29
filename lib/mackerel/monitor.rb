@@ -47,42 +47,27 @@ module Mackerel
     module Monitor
 
       def post_monitor(monitor)
-        command = ApiCommand.new(:post, '/api/v0/monitors')
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+        command = ApiCommand.new(:post, '/api/v0/monitors', @api_key, @content_type)
         command.body = monitor.to_json
         data = command.execute(client)
         Mackerel::Monitor.new(data)
       end
 
-      def post_monitoring_check_report(reports)
-        command = ApiCommand.new(:post,'/api/v0/monitoring/checks/report')
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
-        command.body = reports.to_json
-        data = command.execute(client)
-      end
-
       def get_monitors()
-        command = ApiCommand.new(:get,'/api/v0/monitors')
-        command.headers['X-Api-Key'] = @api_key
+        command = ApiCommand.new(:get,'/api/v0/monitors', @api_key, @content_type)
         data = command.execute(client)
         data['monitors'].map{ |m| Mackerel::Monitor.new(m) }
       end
 
       def update_monitor(monitor_id, monitor)
-        command = ApiCommand.new(:put, "/api/v0/monitors/#{monitor_id}")
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+        command = ApiCommand.new(:put, "/api/v0/monitors/#{monitor_id}", @api_key, @content_type)
         command.body = monitor.to_json
         data = command.execute(client)
         Mackerel::Monitor.new(data)
       end
 
       def delete_monitor(monitor_id)
-        command = ApiCommand.new(:delete, "/api/v0/monitors/#{monitor_id}")
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+        command = ApiCommand.new(:delete, "/api/v0/monitors/#{monitor_id}", @api_key, @content_type)
         data = command.execute(client)
         Mackerel::Monitor.new(data)
       end

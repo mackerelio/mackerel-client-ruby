@@ -26,16 +26,13 @@ module Mackerel
     module User
 
       def get_users()
-        command = ApiCommand.new(:get, '/api/v0/users')
-        command.headers['X-Api-Key'] = @api_key
+        command = ApiCommand.new(:get, '/api/v0/users', @api_key, @content_type)
         data = command.execute(client)
         data['users'].map{|u| Mackerel::User.new(u)}
       end
   
-      def delete_user(user_id)
-        command = ApiCommand.new(:delete, "/api/v0/users/#{user_id}")
-        command.headers['X-Api-Key'] = @api_key
-        command.headers['Content-Type'] = 'application/json'
+      def remove_user(user_id)
+        command = ApiCommand.new(:delete, "/api/v0/users/#{user_id}", @api_key, @content_type)
         data = command.execute(client)
         Mackerel::User.new(data)
       end

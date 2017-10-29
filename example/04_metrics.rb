@@ -15,7 +15,7 @@ pp mc.get_service_metric_names("website")
 
 
 pp mc.get_host_metrics(host.id, "loadavg5", current_time - 6000, current_time)
-pp mc.get_latest_host_metrics([host.id], ["loadavg5"])
+pp mc.get_latest_metrics([host.id], ["loadavg5"])
 pp mc.post_metrics([{
   hostId: host.id,
   name: "custom.host_metrics.example",

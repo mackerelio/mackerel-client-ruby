@@ -381,7 +381,7 @@ describe Mackerel::Client do
     end
   end
 
-  describe '#post_annotation' do
+  describe '#post_graph_annotation' do
     let(:stubbed_response) {
       [
         200,
@@ -428,7 +428,7 @@ describe Mackerel::Client do
     end
 
     it "successfully post graph annotations" do
-      expect(client.post_annotation(annotation).to_h).to eq(annotation.merge({ "id" => "XXX" }))
+      expect(client.post_graph_annotation(annotation).to_h).to eq(annotation.merge({ "id" => "XXX" }))
     end
   end
 
