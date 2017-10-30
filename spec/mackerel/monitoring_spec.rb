@@ -11,7 +11,7 @@ describe Mackerel::Client do
       [
         200,
         {},
-        JSON.dump(response_object.to_h)
+        JSON.dump(response_object)
       ]
     }
 
@@ -64,7 +64,7 @@ describe Mackerel::Client do
     end
 
     it "successfully post monitoring checks report" do
-      expect(client.post_monitoring_check_report(reports).to_h).to eq(response_object.to_h)
+      expect(client.post_monitoring_check_report(reports)).to eq(response_object)
     end
   end
 
