@@ -29,14 +29,14 @@ module Mackerel
   module REST
     module Annotation
       def post_graph_annotation(annotation)
-        command = ApiCommand.new(:post, '/api/v0/graph-annotations', @api_key, @content_type)
+        command = ApiCommand.new(:post, '/api/v0/graph-annotations', @api_key)
         command.body = annotation.to_json
         data = command.execute(client)
         Mackerel::Annotation.new(data)
       end
 
       def get_graph_annotations(service, from, to)
-        command = ApiCommand.new(:get, '/api/v0/graph-annotations', @api_key, @content_type)
+        command = ApiCommand.new(:get, '/api/v0/graph-annotations', @api_key)
         command.params['service'] = service
         command.params['from'] = from
         command.params['to'] = to
@@ -45,14 +45,14 @@ module Mackerel
       end
 
       def update_graph_annotation(annotation_id, annotation)
-        command = ApiCommand.new(:put, "/api/v0/graph-annotations/#{annotation_id}", @api_key, @content_type)
+        command = ApiCommand.new(:put, "/api/v0/graph-annotations/#{annotation_id}", @api_key)
         command.body = annotation.to_json
         data = command.execute(client)
         Mackerel::Annotation.new(data)
       end
 
       def delete_graph_annotation(annotation_id)
-        command = ApiCommand.new(:delete, "/api/v0/graph-annotations/#{annotation_id}", @api_key, @content_type)
+        command = ApiCommand.new(:delete, "/api/v0/graph-annotations/#{annotation_id}", @api_key)
         data = command.execute(client)
         Mackerel::Annotation.new(data)
       end

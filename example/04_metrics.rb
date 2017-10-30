@@ -11,7 +11,7 @@ current_time = Time.now.to_i
 rand = Random.new(current_time.to_i)
 
 
-pp mc.get_service_metric_names("website")
+pp mc.get_metric_names("mackerel")
 
 
 pp mc.get_host_metrics(host.id, "loadavg5", current_time - 6000, current_time)
@@ -34,11 +34,11 @@ pp mc.define_graphs([
   }
 ])
 
-pp mc.post_service_metrics("website", [{
+pp mc.post_service_metrics("mackerel", [{
   name: "custom.define_graph.example",
   time: current_time,
   value: rand.rand(20)
 }])
 
-pp mc.get_service_metrics("website", "custom.define_graph.example", current_time - 6000, current_time)
+pp mc.get_service_metrics("mackerel", "custom.define_graph.example", current_time - 6000, current_time)
 

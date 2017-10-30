@@ -12,13 +12,13 @@ markdown = "
 # Inform to labors
 
 Working time is eight hour.
-May day is May first.
+May day is May 1st.
 "
 urlPath = "DashboardExample"
 pp mc.post_dashboard(title, markdown, urlPath)
 
 # Update the dashboard
-new_title = "ThatSong"
+new_title = "That Song"
 pp dashboards = mc.get_dashboards
 target_dashboard = dashboards.select{|d| d.urlPath =~ /#{urlPath}/ }.first
 mc.get_dashboard(target_dashboard.id)

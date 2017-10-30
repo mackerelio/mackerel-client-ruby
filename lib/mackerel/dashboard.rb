@@ -28,7 +28,7 @@ module Mackerel
   module REST
     module Dashboard
       def post_dashboard(title, markdown, urlPath)
-        command = ApiCommand.new(:post, '/api/v0/dashboards', @api_key, @content_type)
+        command = ApiCommand.new(:post, '/api/v0/dashboards', @api_key)
         command.body = {
             title: title,
             bodyMarkdown: markdown,
@@ -39,7 +39,7 @@ module Mackerel
       end
 
       def update_dashboard(dashboardId, title, markdown, urlPath)
-        command = ApiCommand.new(:put, "/api/v0/dashboards/#{dashboardId}", @api_key, @content_type)
+        command = ApiCommand.new(:put, "/api/v0/dashboards/#{dashboardId}", @api_key)
         command.body = {
             title: title,
             bodyMarkdown: markdown,
@@ -50,19 +50,19 @@ module Mackerel
       end
 
       def get_dashboards()
-        command = ApiCommand.new(:get, '/api/v0/dashboards', @api_key, @content_type)
+        command = ApiCommand.new(:get, '/api/v0/dashboards', @api_key)
         data = command.execute(client)
         data['dashboards'].map{ |d| Mackerel::Dashboard.new(d) }
       end
 
       def get_dashboard(dashboardId)
-        command = ApiCommand.new(:get, "/api/v0/dashboards/#{dashboardId}", @api_key, @content_type)
+        command = ApiCommand.new(:get, "/api/v0/dashboards/#{dashboardId}", @api_key)
         data = command.execute(client)
         Mackerel::Dashboard.new(data)
       end
 
       def delete_dashboard(dashboardId)
-        command = ApiCommand.new(:delete, "/api/v0/dashboards/#{dashboardId}", @api_key, @content_type)
+        command = ApiCommand.new(:delete, "/api/v0/dashboards/#{dashboardId}", @api_key)
         data = command.execute(client)
         Mackerel::Dashboard.new(data)
       end

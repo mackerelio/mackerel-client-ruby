@@ -26,13 +26,13 @@ module Mackerel
     module User
 
       def get_users()
-        command = ApiCommand.new(:get, '/api/v0/users', @api_key, @content_type)
+        command = ApiCommand.new(:get, '/api/v0/users', @api_key)
         data = command.execute(client)
         data['users'].map{|u| Mackerel::User.new(u)}
       end
   
       def remove_user(user_id)
-        command = ApiCommand.new(:delete, "/api/v0/users/#{user_id}", @api_key, @content_type)
+        command = ApiCommand.new(:delete, "/api/v0/users/#{user_id}", @api_key)
         data = command.execute(client)
         Mackerel::User.new(data)
       end

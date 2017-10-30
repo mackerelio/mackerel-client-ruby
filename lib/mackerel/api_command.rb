@@ -4,14 +4,14 @@ require 'pp'
 module Mackerel
   class ApiCommand
     METHODS = [:get, :delete, :put, :post]
+    JSON_CONTENT_TYPE = 'application/json'
 
     attr_accessor :headers, :body, :params, :query
 
-    def initialize(method, path, api_key, content_type = 'application/json')
+    def initialize(method, path, api_key)
       @path = path
       @method = method
       @api_key = api_key
-      @content_type = content_type
 
       @headers = {}
       @body = ''
@@ -29,7 +29,7 @@ module Mackerel
       response = client_method.call(request_path) do |req|
         req.headers = @headers
         req.headers['x-api-key'] = @api_key
-        req.headers['Content-Type'] = @content_type
+        req.headers['Content-Type'] ||= JSON_CONTENT_TYPE
         req.params = @params
         req.body = @body
       end

@@ -23,7 +23,7 @@ module Mackerel
     module Organization
 
       def get_organization()
-        command = ApiCommand.new(:get, '/api/v0/org', @api_key, @content_type)
+        command = ApiCommand.new(:get, '/api/v0/org', @api_key)
         data = command.execute(client)
         Mackerel::Organization.new(data)
       end

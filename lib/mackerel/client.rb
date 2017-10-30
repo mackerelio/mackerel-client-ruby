@@ -39,7 +39,6 @@ module Mackerel
     def initialize(args = {})
       @origin       = args[:mackerel_origin]  || 'https://api.mackerelio.com'
       @api_key      = args[:mackerel_api_key] || raise(ERROR_MESSAGE_FOR_API_KEY_ABSENCE)
-      @content_type = args[:content_type]     || 'application/json'
       @timeout      = args[:timeout]          || 30 # Ref: apiRequestTimeout at mackerel-agent
       @open_timeout = args[:open_timeout]     || 30 # Ref: apiRequestTimeout at mackerel-agent
     end

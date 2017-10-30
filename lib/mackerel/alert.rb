@@ -32,13 +32,13 @@ module Mackerel
   module REST
     module Alert
       def get_alerts()
-        command = ApiCommand.new(:get, "/api/v0/alerts", @api_key, @content_type)
+        command = ApiCommand.new(:get, "/api/v0/alerts", @api_key)
         data = command.execute(client)
         data["alerts"].map { |a| Mackerel::Alert.new(a) }
       end
 
       def close_alert(alertId, reason)
-        command = ApiCommand.new(:post, "/api/v0/alerts/#{alertId}/close", @api_key, @content_type)
+        command = ApiCommand.new(:post, "/api/v0/alerts/#{alertId}/close", @api_key)
         command.body = { reason: reason.to_s }.to_json
         data = command.execute(client)
         Mackerel::Alert.new(data)
