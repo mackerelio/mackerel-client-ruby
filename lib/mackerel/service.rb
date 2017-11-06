@@ -39,7 +39,7 @@ module Mackerel
         data['roles'].map {|s| Mackerel::Role.new(s) }
       end
 
-      def get_metric_names(serviceName)
+      def get_service_metric_names(serviceName)
         command = ApiCommand.new(:get, "/api/v0/services/#{serviceName}/metric-names", @api_key)
         data = command.execute(client)
         data['names']
