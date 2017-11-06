@@ -11,7 +11,7 @@ current_time = Time.now.to_i
 rand = Random.new(current_time.to_i)
 
 
-pp mc.get_metric_names("mackerel")
+pp mc.get_service_metric_names("mackerel")
 
 
 pp mc.get_host_metrics(host.id, "loadavg5", current_time - 6000, current_time)
