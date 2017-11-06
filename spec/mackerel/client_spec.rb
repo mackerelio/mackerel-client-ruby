@@ -54,6 +54,49 @@ describe Mackerel::Client do
     end
   end
 
+
+  describe '#update_host' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.put(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts/#{hostId}" }
+
+    let(:host) {
+      {
+        'name' => 'host001',
+        'meta' => {"abcd" => "abcdefghijklmnopqlstu"}
+      }
+    }
+
+    let(:response_object) {
+      { 'id' => hostId }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully update host" do
+      expect(client.update_host(hostId, host)).to eq(response_object)
+    end
+  end
+
+
   describe '#get_host' do
     let(:stubbed_response) {
       [
@@ -143,6 +186,49 @@ describe Mackerel::Client do
     end
   end
 
+
+  describe '#update_host_roles' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.adapter :test do |stubs|
+          stubs.put(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:hostId) { '21obeF4PhZN' }
+
+    let(:api_path) { "/api/v0/hosts/#{hostId}/role-fullnames" }
+
+    let(:roles) {
+        [
+          'Web', 'Linux', 'NetworkG1'
+        ]
+    }
+
+    let(:response_object) {
+      { 'success' => true}
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully update host" do
+      expect(client.update_host_roles(hostId, roles)).to eq({'success' => true})
+    end
+  end
+
+
+
   describe '#retire_host' do
     let(:stubbed_response) {
       [
@@ -174,126 +260,6 @@ describe Mackerel::Client do
 
     it "successfully retire a host" do
       expect(client.retire_host(hostId)).to eq(response_object)
-    end
-  end
-
-  describe '#post_metrics' do
-    let(:stubbed_response) {
-      [
-        200,
-        {},
-        JSON.dump(response_object)
-      ]
-    }
-
-    let(:test_client) {
-      Faraday.new do |builder|
-        builder.adapter :test do |stubs|
-          stubs.post(api_path) { stubbed_response }
-        end
-      end
-    }
-
-    let(:hostId) { '21obeF4PhZN' }
-
-    let(:api_path) { "/api/v0/tsdb" }
-
-    let(:response_object) {
-      { 'success' => true }
-    }
-
-    let(:metrics) { [
-        { 'hostId' => hostId, 'name' => 'custom.metrics.loadavg', 'time' => 1401537844, 'value' => 1.4 },
-        { 'hostId' => hostId, 'name' => 'custom.metrics.uptime',  'time' => 1401537844, 'value' => 500 },
-    ] }
-
-    before do
-      allow(client).to receive(:http_client).and_return(test_client)
-    end
-
-    it "successfully post metrics" do
-      expect(client.post_metrics(metrics)).to eq(response_object)
-    end
-  end
-
-  describe "#get_latest_metrics" do
-    let(:stubbed_response) {
-      [
-       200,
-       {},
-       JSON.dump(response_object)
-      ]
-    }
-
-    let(:test_client) {
-      Faraday.new do |builder|
-        builder.adapter :test do |stubs|
-          stubs.get(api_path) { stubbed_response }
-        end
-      end
-    }
-
-    let(:hostId) { '21obeF4PhZN' }
-
-    let(:metric_name) { "loadavg5" }
-
-    let(:api_path) { "/api/v0/tsdb/latest" }
-
-    let(:response_object) {
-      {
-        "tsdbLatest" => {
-          hostId => {
-            metric_name => {"time"=>1407898200, "value"=>0.03666666666666667},
-          }
-        }
-      }
-    }
-
-    before do
-      allow(client).to receive(:http_client).and_return(test_client)
-    end
-
-    it "successfully post metrics" do
-      expect(client.get_latest_metrics([hostId], [metric_name])).to eq(response_object["tsdbLatest"])
-    end
-  end
-
-  describe '#post_service_metrics' do
-    let(:stubbed_response) {
-      [
-        200,
-        {},
-        JSON.dump(response_object)
-      ]
-    }
-
-    let(:test_client) {
-      Faraday.new do |builder|
-        builder.adapter :test do |stubs|
-          stubs.post(api_path) { stubbed_response }
-        end
-      end
-    }
-
-    let(:service_name) { 'service_name' }
-
-    let(:api_path) { "/api/v0/services/#{service_name}/tsdb" }
-
-    let(:response_object) {
-      { 'success' => true }
-    }
-
-    let(:metrics) { [
-        { 'name' => 'custom.metrics.latency', 'time' => 1401537844, 'value' => 0.5 },
-        { 'name' => 'custom.metrics.uptime',  'time' => 1401537844, 'value' => 500 },
-    ] }
-
-    before do
-      allow(client).to receive(:http_client).and_return(test_client)
-    end
-
-    it "successfully post metrics" do
-      expect(client.post_service_metrics(service_name, metrics)).to eq(response_object)
     end
   end
 
@@ -435,8 +401,19 @@ describe Mackerel::Client do
     let(:api_path) { '/api/v0/graph-annotations' }
 
     let(:response_object) {
-      {
+      Mackerel::Annotation.new({
         'id' => 'XXX',
+        'service' => 'myService',
+        'roles' => ['role1', 'role2'],
+        'from' => 123456,
+        'to' => 123457,
+        'title' => 'Some event',
+        'description' => 'Something happend!'
+      })
+    }
+
+    let(:annotation) {
+      {
         'service' => 'myService',
         'roles' => ['role1', 'role2'],
         'from' => 123456,
@@ -446,23 +423,12 @@ describe Mackerel::Client do
       }
     }
 
-    let(:annotation) {
-      {
-        service: 'myService',
-        roles: ['role1', 'role2'],
-        from: 123456,
-        to: 123457,
-        title: 'Some event',
-        description: 'Something happend!'
-      }
-    }
-
     before do
       allow(client).to receive(:http_client).and_return(test_client)
     end
 
-    it "successfully post annotations" do
-      expect(client.post_graph_annotation(annotation)).to eq(response_object)
+    it "successfully post graph annotations" do
+      expect(client.post_graph_annotation(annotation).to_h).to eq(annotation.merge({ "id" => "XXX" }))
     end
   end
 

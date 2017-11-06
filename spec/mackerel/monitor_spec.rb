@@ -140,7 +140,7 @@ describe Mackerel::Client do
     let(:api_path) { "/api/v0/monitors/#{monitorId}" }
 
     let(:monitor) {
-      Mackerel::Host.new(
+      {
         'type' => 'host',
         'name' => 'monitor001',
         'duration' => 5,
@@ -150,11 +150,11 @@ describe Mackerel::Client do
         'critical' => 6,
         'notificationInterval' => 600,
         'isMute' => false,
-      )
+      }
     }
 
     let(:response_object) {
-      { 'id' => monitorId }
+      Mackerel::Monitor.new(monitor)
     }
 
     before do
@@ -162,7 +162,7 @@ describe Mackerel::Client do
     end
 
     it "successfully update a monitor" do
-      expect(client.update_monitor(monitorId, monitor)).to eq(response_object)
+      expect(client.update_monitor(monitorId, monitor).to_h).to eq(monitor)
     end
   end
 

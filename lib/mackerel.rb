@@ -1,5 +1,4 @@
 require 'mackerel/client'
-require 'mackerel/monitor'
-require 'mackerel/metadata'
+require 'mackerel/api_command'
 require 'mackerel/runner'
-
+require 'mackerel/version'

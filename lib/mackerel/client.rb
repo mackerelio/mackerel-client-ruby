@@ -2,13 +2,39 @@ require 'faraday'
 require 'uri'
 
 require 'json' unless defined? ::JSON
+
+require 'mackerel/role'
 require 'mackerel/host'
+require 'mackerel/monitor'
+require 'mackerel/monitoring'
+require 'mackerel/service'
+require 'mackerel/alert'
+require 'mackerel/annotation'
+require 'mackerel/user'
+require 'mackerel/invitation'
+require 'mackerel/organization'
+require 'mackerel/dashboard'
+require 'mackerel/metric'
+require 'mackerel/metadata'
+require 'mackerel/notification_group'
+require 'mackerel/channel'
 
 module Mackerel
-
   class Client
-
-    ERROR_MESSAGE_FOR_API_KEY_ABSENCE = "API key is absent. Set your API key in a environment variable called MACKEREL_APIKEY."
+    include Mackerel::REST::Alert
+    include Mackerel::REST::Annotation
+    include Mackerel::REST::Dashboard
+    include Mackerel::REST::Host
+    include Mackerel::REST::Invitation
+    include Mackerel::REST::Metric
+    include Mackerel::REST::Monitor
+    include Mackerel::REST::Monitoring
+    include Mackerel::REST::Organization
+    include Mackerel::REST::Service
+    include Mackerel::REST::User
+    include Mackerel::REST::Metadata
+    include Mackerel::REST::Channel
+    include Mackerel::REST::NotificationGroup
 
     def initialize(args = {})
       @origin       = args[:mackerel_origin]  || 'https://api.mackerelio.com'
@@ -17,156 +43,8 @@ module Mackerel
       @open_timeout = args[:open_timeout]     || 30 # Ref: apiRequestTimeout at mackerel-agent
     end
 
-    def post_host(host)
-      response = client.post "/api/v0/hosts" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = host.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/hosts failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-    end
-
-    def get_host(host_id)
-      response = client.get "/api/v0/hosts/#{host_id}" do |req|
-        req.headers['X-Api-Key'] = @api_key
-      end
-
-      unless response.success?
-        raise "GET /api/v0/hosts/#{host_id} failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-      Host.new(data['host'])
-    end
-
-    def update_host_status(host_id, status)
-      unless [:standby, :working, :maintenance, :poweroff].include?(status.to_sym)
-        raise "no such status: #{status}"
-      end
-
-      response = client.post "/api/v0/hosts/#{host_id}/status" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = { "status" => status }.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/hosts/#{host_id}/status failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-    end
-
-    def retire_host(host_id)
-      response = client.post "/api/v0/hosts/#{host_id}/retire" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = { }.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/hosts/#{host_id}/retire failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-    end
-
-    def post_metrics(metrics)
-      response = client.post '/api/v0/tsdb' do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = metrics.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/tsdb failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-    end
-
-    def get_latest_metrics(hostIds, names)
-      query = (hostIds.map{ |hostId| "hostId=#{hostId}" } +
-               names.map{ |name| "name=#{name}" }).join('&')
-
-      response = client.get "/api/v0/tsdb/latest?#{query}" do |req|
-        req.headers['X-Api-Key'] = @api_key
-      end
-
-      unless response.success?
-        raise "/api/v0/tsdb/latest?#{query} failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-      data["tsdbLatest"]
-    end
-
-    def post_service_metrics(service_name, metrics)
-      response = client.post "/api/v0/services/#{service_name}/tsdb" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = metrics.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/services/#{service_name}/tsdb failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-    end
-
-    def define_graphs(graph_defs)
-      response = client.post '/api/v0/graph-defs/create' do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = graph_defs.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/graph-defs/create failed: #{response.status} #{response.body}"
-      end
-
-      JSON.parse(response.body)
-    end
-
-    def get_hosts(opts = {})
-      response = client.get '/api/v0/hosts' do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.params['service']          = opts[:service]          if opts[:service]
-        req.params['role']             = opts[:roles]            if opts[:roles]
-        req.params['name']             = opts[:name]             if opts[:name]
-        req.params['status']           = opts[:status]           if opts[:status]
-        req.params['customIdentifier'] = opts[:customIdentifier] if opts[:customIdentifier]
-      end
-
-      unless response.success?
-        raise "GET /api/v0/hosts failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-      data['hosts'].map{ |host_json| Host.new(host_json) }
-    end
-
-    def post_graph_annotation(annotation)
-      response = client.post '/api/v0/graph-annotations' do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = annotation.to_json
-      end
-
-      unless response.success?
-        raise "POST /api/v0/graph-annotations failed: #{response.status} #{response.body}"
-      end
-
-      JSON.parse(response.body)
-    end
-
     private
+    ERROR_MESSAGE_FOR_API_KEY_ABSENCE = "API key is absent. Set your API key in a environment variable called MACKEREL_APIKEY."
 
     def client
       @client ||= http_client
@@ -181,7 +59,5 @@ module Mackerel
         faraday.options.open_timeout   = @open_timeout
       end
     end
-
   end
-
 end

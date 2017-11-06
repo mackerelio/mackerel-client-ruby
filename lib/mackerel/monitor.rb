@@ -32,75 +32,45 @@ module Mackerel
     def to_h
       instance_variables.flat_map do |name|
         respond_to?(name[1..-1]) ? [name[1..-1]] : []
-      end.each_with_object({}) do |name, hash| 
+      end.each_with_object({}) do |name, hash|
         hash[name] = public_send(name)
       end.delete_if { |key, val| val == nil }
     end
 
-    def to_json
-      return to_h.to_json
+    def to_json(options = nil)
+      return to_h.to_json(options)
     end
 
   end
 
-  class Client
+  module REST
+    module Monitor
 
-    def post_monitor(monitor)
-      response = client.post "/api/v0/monitors" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = monitor.to_json
+      def post_monitor(monitor)
+        command = ApiCommand.new(:post, '/api/v0/monitors', @api_key)
+        command.body = monitor.to_json
+        data = command.execute(client)
+        Mackerel::Monitor.new(data)
       end
 
-      unless response.success?
-        raise "POST /api/v0/monitors failed: #{response.status}"
+      def get_monitors()
+        command = ApiCommand.new(:get,'/api/v0/monitors', @api_key)
+        data = command.execute(client)
+        data['monitors'].map{ |m| Mackerel::Monitor.new(m) }
       end
 
-      data = JSON.parse(response.body)
-      Monitor.new(data)
+      def update_monitor(monitor_id, monitor)
+        command = ApiCommand.new(:put, "/api/v0/monitors/#{monitor_id}", @api_key)
+        command.body = monitor.to_json
+        data = command.execute(client)
+        Mackerel::Monitor.new(data)
+      end
+
+      def delete_monitor(monitor_id)
+        command = ApiCommand.new(:delete, "/api/v0/monitors/#{monitor_id}", @api_key)
+        data = command.execute(client)
+        Mackerel::Monitor.new(data)
+      end
     end
-
-    def get_monitors()
-      response = client.get '/api/v0/monitors' do |req|
-        req.headers['X-Api-Key'] = @api_key
-      end
-
-      unless response.success?
-        raise "GET /api/v0/monitors failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-      data['monitors'].map{ |monitor_json| Monitor.new(monitor_json) }
-    end
-
-    def update_monitor(monitor_id, monitor)
-      response = client.put "/api/v0/monitors/#{monitor_id}" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-        req.body = monitor.to_json
-      end
-
-      unless response.success?
-        raise "PUT /api/v0/monitors/#{monitor_id} failed: #{response.status}"
-      end
-
-      JSON.parse(response.body)
-    end
-
-    def delete_monitor(monitor_id)
-      response = client.delete "/api/v0/monitors/#{monitor_id}" do |req|
-        req.headers['X-Api-Key'] = @api_key
-        req.headers['Content-Type'] = 'application/json'
-      end
-
-      unless response.success?
-        raise "DELETE /api/v0/monitors/#{monitor_id} failed: #{response.status}"
-      end
-
-      data = JSON.parse(response.body)
-      Monitor.new(data)
-    end
-
   end
-
 end
