@@ -3,6 +3,8 @@ require 'uri'
 
 require 'json' unless defined? ::JSON
 
+require 'mackerel/api_command'
+
 require 'mackerel/role'
 require 'mackerel/host'
 require 'mackerel/monitor'
