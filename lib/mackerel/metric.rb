@@ -4,7 +4,7 @@ module Mackerel
       def post_metrics(metrics)
         command = ApiCommand.new(:post, '/api/v0/tsdb', @api_key)
         command.body = metrics.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def get_host_metrics(host_id, name, from, to)
@@ -27,7 +27,7 @@ module Mackerel
       def post_service_metrics(service_name, metrics)
         command = ApiCommand.new(:post, "/api/v0/services/#{service_name}/tsdb", @api_key)
         command.body = metrics.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def get_service_metrics(service_name, name, from, to)
@@ -42,7 +42,7 @@ module Mackerel
       def define_graphs(graph_defs)
         command = ApiCommand.new(:post, '/api/v0/graph-defs/create', @api_key)
         command.body = graph_defs.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
     end
   end

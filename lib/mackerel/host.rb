@@ -45,20 +45,20 @@ module Mackerel
       def post_host(host)
         command = ApiCommand.new(:post, "/api/v0/hosts", @api_key)
         command.body = host.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def update_host(host_id, host)
         command = ApiCommand.new(:put, "/api/v0/hosts/#{host_id}", @api_key)
         command.body = host.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def update_host_roles(host_id, roles)
         roles = [roles] if roles.is_a?(String)
         command = ApiCommand.new(:put, "/api/v0/hosts/#{host_id}/role-fullnames", @api_key)
         command.body = { "roleFullnames" => roles }.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def get_host(host_id)
@@ -71,16 +71,16 @@ module Mackerel
         unless [:standby, :working, :maintenance, :poweroff].include?(status.to_sym)
           raise "no such status: #{status}"
         end
-  
+
         command = ApiCommand.new(:post, "/api/v0/hosts/#{host_id}/status", @api_key)
         command.body = { "status" => status }.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def retire_host(host_id)
         command = ApiCommand.new(:post, "/api/v0/hosts/#{host_id}/retire", @api_key)
         command.body = { }.to_json
-        data = command.execute(client)
+        command.execute(client)
       end
 
       def get_hosts(opts = {})
