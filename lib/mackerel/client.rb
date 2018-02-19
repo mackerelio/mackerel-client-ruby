@@ -53,7 +53,7 @@ module Mackerel
     end
 
     def http_client
-      Faraday.new(:url => @origin) do |faraday|
+      Faraday.new(:url => @origin, :ssl => {:version => :TLSv1_2}) do |faraday|
         faraday.response :logger if ENV['DEBUG']
         faraday.adapter Faraday.default_adapter
         faraday.options.params_encoder = Faraday::FlatParamsEncoder
