@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Mackerel developer team"]
   spec.email         = ["developers@mackerel.io"]
   spec.summary       = 'Mackerel client implemented by Ruby.'
-  spec.description   = 'Mackerel client is a library to access Mackerel (https://mackerel.io/). CLI tool `mkr` is also provided.'
+  spec.description   = 'Mackerel client is a library to access Mackerel (https://mackerel.io/).'
   spec.homepage      = "https://mackerel.io/"
   spec.license       = "Apache 2"
   spec.files         = `git ls-files -z`.split("\x0")
