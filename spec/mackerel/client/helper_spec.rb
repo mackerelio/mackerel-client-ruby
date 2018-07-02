@@ -1,6 +1,6 @@
 require 'mackerel/client/helper'
 
-describe Mackerel::Client::Helper do
+RSpec.describe Mackerel::Client::Helper do
   describe '.as_safe_metric_name' do
     it 'translates characters that cannot be used as a metric name to safe characters' do
       name = 'readme.md'
