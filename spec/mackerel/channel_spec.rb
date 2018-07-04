@@ -1,8 +1,4 @@
-require 'mackerel'
-require 'mackerel/host'
-require 'json'
-
-describe Mackerel::Client do
+RSpec.describe Mackerel::Client do
   let(:api_key) { 'xxxxxxxx' }
   let(:client) { Mackerel::Client.new(:mackerel_api_key => api_key) }
 
