@@ -27,7 +27,7 @@ module Mackerel
 
       client_method = client.method(@method)
       response = client_method.call(request_path) do |req|
-        req.headers = @headers
+        req.headers.update @headers
         req.headers['x-api-key'] = @api_key
         req.headers['Content-Type'] ||= JSON_CONTENT_TYPE
         req.params = @params
