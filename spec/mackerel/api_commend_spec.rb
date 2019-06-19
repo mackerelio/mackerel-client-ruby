@@ -7,6 +7,7 @@ RSpec.describe Mackerel::ApiCommand do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.get(api_path) { stubbed_response }
         end
@@ -60,7 +61,7 @@ RSpec.describe Mackerel::ApiCommand do
       }
 
       it {
-        expect { command.execute(test_client) }.to raise_error StandardError, "GET /api/v0/services failed: 404 Resource not found"
+        expect { command.execute(test_client) }.to raise_error Mackerel::Error, "GET /api/v0/services failed: 404 Host Not Found."
       }
     end
 
@@ -74,7 +75,7 @@ RSpec.describe Mackerel::ApiCommand do
       }
 
       it {
-        expect { command.execute(test_client) }.to raise_error StandardError, "GET /api/v0/services failed: 401 Authentication failed."
+        expect { command.execute(test_client) }.to raise_error Mackerel::Error, "GET /api/v0/services failed: 401 Authentication failed. Please try with valid Api Key."
       }
     end
   end
