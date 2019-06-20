@@ -37,7 +37,8 @@ module Mackerel
     rescue Faraday::Error::ClientError => e
       begin
         body = JSON.parse(e.response[:body])
-        raise Mackerel::Error, "#{@method.upcase} #{@path} failed: #{e.response[:status]} #{body["error"]}"
+        message = body["error"].is_a?(Hash) ? body["error"]["message"] : body["error"]
+        raise Mackerel::Error, "#{@method.upcase} #{@path} failed: #{e.response[:status]} #{message}"
       rescue JSON::ParserError
         # raise Mackerel::Error with original response body
         raise Mackerel::Error, "#{@method.upcase} #{@path} failed: #{e.response[:status]} #{e.response[:body]}"

@@ -56,7 +56,7 @@ RSpec.describe Mackerel::ApiCommand do
         [
           404,
           {},
-          JSON.dump({"error" => "Host Not Found."})
+          JSON.dump({"error" => { "message" => "Host Not Found."} })
         ]
       }
 
