@@ -4,6 +4,7 @@ require 'uri'
 require 'json' unless defined? ::JSON
 
 require 'mackerel/api_command'
+require 'mackerel/error'
 
 require 'mackerel/role'
 require 'mackerel/host'
@@ -54,6 +55,7 @@ module Mackerel
 
     def http_client
       Faraday.new(:url => @origin) do |faraday|
+        faraday.response :raise_error
         faraday.response :logger if ENV['DEBUG']
         faraday.adapter Faraday.default_adapter
         faraday.options.params_encoder = Faraday::FlatParamsEncoder

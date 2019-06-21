@@ -33,31 +33,19 @@ module Mackerel
         req.params = @params
         req.body = @body
       end
-      check_status(response.status)
-
       JSON.parse(response.body)
+    rescue Faraday::Error::ClientError => e
+      begin
+        body = JSON.parse(e.response[:body])
+        message = body["error"].is_a?(Hash) ? body["error"]["message"] : body["error"]
+        raise Mackerel::Error, "#{@method.upcase} #{@path} failed: #{e.response[:status]} #{message}"
+      rescue JSON::ParserError
+        # raise Mackerel::Error with original response body
+        raise Mackerel::Error, "#{@method.upcase} #{@path} failed: #{e.response[:status]} #{e.response[:body]}"
+      end
     end
 
     private
-
-    def check_status(status)
-      case status
-      when 200...300
-        nil
-      when 400
-        message ="Invalid parameter"
-        raise "#{@method.upcase} #{@path} failed: #{status} #{message}"
-      when 403
-        message ="Not authorized"
-        raise "#{@method.upcase} #{@path} failed: #{status} #{message}"
-      when 404
-        message ="Resource not found"
-        raise "#{@method.upcase} #{@path} failed: #{status} #{message}"
-      when 409
-        message ="Already exists"
-        raise "#{@method.upcase} #{@path} failed: #{status} #{message}"
-      end
-    end
 
     def make_escaped_query
       @query.map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"}.join("&")

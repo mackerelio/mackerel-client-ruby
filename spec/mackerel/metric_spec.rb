@@ -13,6 +13,7 @@ RSpec.describe Mackerel::Client do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.post(api_path) { stubbed_response }
         end
@@ -52,6 +53,7 @@ RSpec.describe Mackerel::Client do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.get(api_path) { stubbed_response }
         end
@@ -98,6 +100,7 @@ RSpec.describe Mackerel::Client do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.get(api_path) { stubbed_response }
         end
@@ -141,6 +144,7 @@ RSpec.describe Mackerel::Client do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.post(api_path) { stubbed_response }
         end
@@ -181,6 +185,7 @@ RSpec.describe Mackerel::Client do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.get(api_path) { stubbed_response }
         end
@@ -222,6 +227,7 @@ RSpec.describe Mackerel::Client do
 
     let(:test_client) {
       Faraday.new do |builder|
+        builder.response :raise_error
         builder.adapter :test do |stubs|
           stubs.post(api_path) { stubbed_response }
         end
