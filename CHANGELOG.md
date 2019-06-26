@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.8.0 (2019-06-25)
+## v0.8.0 (2019-06-26)
 
 ### Breaking change
 
