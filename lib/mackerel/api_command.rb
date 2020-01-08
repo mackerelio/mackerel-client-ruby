@@ -34,7 +34,7 @@ module Mackerel
         req.body = @body
       end
       JSON.parse(response.body)
-    rescue Faraday::Error::ClientError => e
+    rescue Faraday::ClientError, Faraday::ServerError => e
       begin
         body = JSON.parse(e.response[:body])
         message = body["error"].is_a?(Hash) ? body["error"]["message"] : body["error"]
