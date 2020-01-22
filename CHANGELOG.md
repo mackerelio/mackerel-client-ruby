@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.9.0 (2020-01-22)
+
+* Use Faraday v1.0 #54 (onk)
+
 ## v0.8.0 (2019-06-26)
 
 ### Breaking change
