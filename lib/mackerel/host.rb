@@ -3,13 +3,13 @@ module Mackerel
   class Host
 
     MACKEREL_INTERFACE_NAME_PATTERN = /^eth\d/
-    attr_accessor :name, :type, :status, :memo, :isRetired, :id, :createdAt, :roles, :interfaces, :customIdentifier
+    attr_accessor :name, :size, :status, :memo, :isRetired, :id, :createdAt, :roles, :interfaces, :customIdentifier
 
     def initialize(args = {})
       @hash             = args
       @name             = args["name"]
       @meta             = args["meta"]
-      @type             = args["type"]
+      @size             = args["size"]
       @status           = args["status"]
       @memo             = args["memo"]
       @isRetired        = args["isRetired"]

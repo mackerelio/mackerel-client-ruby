@@ -14,11 +14,7 @@ pp mc.post_host({
     'agent-revision' => 'bc2f9f6',
     'agent-version'  => '0.6.1',
   },
-  'type' => 'unknown',
-  'status' => 'working',
   'memo' => 'test web host',
-  'isRetired' => false,
-  'createdAt' => '1401291970',
   'roleFullnames' => [
     'mackerel:web'
   ],
@@ -35,11 +31,7 @@ pp mc.post_host({
     'agent-revision' => 'bc2f9f6',
     'agent-version'  => '0.6.1',
   },
-  'type' => 'unknown',
-  'status' => 'working',
   'memo' => 'test db host',
-  'isRetired' => false,
-  'createdAt' => '1401291976',
   'roleFullnames' => [
     'mackerel:db'
   ],
@@ -75,12 +67,7 @@ pp mc.update_host(target_host.id,{
     'agent-revision' => 'bc2f9f6',
     'agent-version'  => '0.6.1',
   },
-  'type' => 'unknown',
-  'status' => 'working',
   'memo' => 'test host',
-  'isRetired' => false,
-  'createdAt' => '1401291976',
-  'id' => target_host.id,
   'roleFullnames' => [
     'mackerel:db'
   ],
@@ -93,5 +80,3 @@ pp mc.update_host(target_host.id,{
 
 # retire the host
 pp mc.retire_host(target_host.id)
-
-
