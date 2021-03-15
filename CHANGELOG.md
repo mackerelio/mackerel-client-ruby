@@ -4,7 +4,7 @@
 
 ## Breaking change
 
-Previously `Host` has `type` attribute, but the field is removed.
+Previously `Host` has `type` attribute, but it is removed.
 
 * Drop `type` attribute from `Host` and introduce `size` instead #58 (astj)
 
