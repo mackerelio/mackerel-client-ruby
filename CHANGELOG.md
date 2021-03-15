@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.10.0 (2021-03-15)
+
+## Breaking change
+
+Previously `Host` has `type` attribute, but it is removed.
+
+* Drop `type` attribute from `Host` and introduce `size` instead #58 (astj)
+
 ## v0.9.0 (2020-01-23)
 
 * Use Faraday v1.0 #54 (onk)
