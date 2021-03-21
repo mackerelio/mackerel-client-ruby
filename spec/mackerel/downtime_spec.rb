@@ -2,7 +2,7 @@ RSpec.describe Mackerel::Client do
   let(:api_key) { 'xxxxxxxx' }
   let(:client) { Mackerel::Client.new(:mackerel_api_key => api_key) }
 
-  describe '#create_downtime' do
+  describe '#post_downtime' do
     let(:stubbed_response) {
       [
         200,
@@ -47,12 +47,12 @@ RSpec.describe Mackerel::Client do
       allow(client).to receive(:http_client).and_return(test_client)
     end
 
-    it "successfully create downtime" do
-      expect(client.create_downtime(downtime).to_h).to eq(response_object)
+    it "successfully post downtime" do
+      expect(client.post_downtime(downtime).to_h).to eq(response_object)
     end
   end
 
-  describe '#list_downtime' do
+  describe '#get_downtimes' do
     let(:stubbed_response) {
       [
         200,
@@ -93,8 +93,8 @@ RSpec.describe Mackerel::Client do
       allow(client).to receive(:http_client).and_return(test_client)
     end
 
-    it "successfully list downtime" do
-      expect(client.list_downtime.to_h).to eq(response_object)
+    it "successfully get downtimes" do
+      expect(client.get_downtimes.to_h).to eq(response_object)
     end
   end
 

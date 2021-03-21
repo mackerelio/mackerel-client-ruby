@@ -1,13 +1,13 @@
 module Mackerel
   module REST
     module Downtime
-      def create_downtime(downtime)
+      def post_downtime(downtime)
         command = ApiCommand.new(:post, "/api/v0/downtimes", @api_key)
         command.body = downtime.to_json
         command.execute(client)
       end
 
-      def list_downtime()
+      def get_downtimes()
         command = ApiCommand.new(:get, "/api/v0/downtimes", @api_key)
         command.execute(client)
       end
