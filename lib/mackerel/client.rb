@@ -21,6 +21,7 @@ require 'mackerel/metric'
 require 'mackerel/metadata'
 require 'mackerel/notification_group'
 require 'mackerel/channel'
+require 'mackerel/downtime'
 
 module Mackerel
   class Client
@@ -38,6 +39,7 @@ module Mackerel
     include Mackerel::REST::Metadata
     include Mackerel::REST::Channel
     include Mackerel::REST::NotificationGroup
+    include Mackerel::REST::Downtime
 
     def initialize(args = {})
       @origin       = args[:mackerel_origin]  || 'https://api.mackerelio.com'
