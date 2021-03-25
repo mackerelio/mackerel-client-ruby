@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11.0 (2021-03-24)
+
+* Implements downtime API #61 (myoan)
+
 ## v0.10.0 (2021-03-15)
 
 ## Breaking change
