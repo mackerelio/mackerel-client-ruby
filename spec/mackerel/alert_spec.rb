@@ -11,15 +11,6 @@ RSpec.describe Mackerel::Client do
       ]
     }
 
-    let(:test_client) {
-      Faraday.new do |builder|
-        builder.response :raise_error
-        builder.adapter :test do |stubs|
-          stubs.get(api_path) { stubbed_response }
-        end
-      end
-    }
-
     let(:api_path) { '/api/v0/alerts' }
 
     let(:alertId) { 'abcdefg' }
@@ -42,12 +33,48 @@ RSpec.describe Mackerel::Client do
       { 'alerts' => alerts }
     }
 
-    before do
-      allow(client).to receive(:http_client).and_return(test_client)
+    context 'no parameters' do
+      let(:test_client) {
+        Faraday.new do |builder|
+          builder.response :raise_error
+          builder.adapter :test do |stubs|
+            stubs.get(api_path) { stubbed_response }
+          end
+        end
+      }
+
+      before do
+        allow(client).to receive(:http_client).and_return(test_client)
+      end
+
+      it "successfully get alerts" do
+        expect(client.get_alerts().map(&:to_h)).to eq(alerts)
+      end
     end
 
-    it "successfully get alerts" do
-      expect(client.get_alerts().map(&:to_h)).to eq(alerts)
+    context 'with parameters' do
+      let(:with_closed) { true }
+      let(:next_id) { alertId }
+      let(:limit) { 100 }
+
+      let(:test_client) {
+        Faraday.new do |builder|
+          builder.response :raise_error
+          builder.adapter :test do |stubs|
+            stubs.get("#{api_path}?limit=#{limit}&nextId=#{next_id}&withClosed=#{with_closed}") { stubbed_response }
+          end
+        end
+      }
+
+      before do
+        allow(client).to receive(:http_client).and_return(test_client)
+      end
+
+      it "successfully get alerts" do
+        expect(
+          client.get_alerts(with_closed: with_closed, next_id: next_id, limit: limit).map(&:to_h)
+        ).to eq(alerts)
+      end
     end
   end
 

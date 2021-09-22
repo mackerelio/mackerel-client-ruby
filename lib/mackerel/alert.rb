@@ -31,8 +31,11 @@ module Mackerel
 
   module REST
     module Alert
-      def get_alerts()
+      def get_alerts(opts = {})
         command = ApiCommand.new(:get, "/api/v0/alerts", @api_key)
+        command.params['withClosed'] = opts[:with_closed] if opts[:with_closed]
+        command.params['nextId'] = opts[:next_id] if opts[:next_id]
+        command.params['limit'] = opts[:limit] if opts[:limit]
         data = command.execute(client)
         data["alerts"].map { |a| Mackerel::Alert.new(a) }
       end
