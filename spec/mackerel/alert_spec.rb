@@ -78,6 +78,52 @@ RSpec.describe Mackerel::Client do
     end
   end
 
+  describe '#get_alert' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.response :raise_error
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:api_path) { "/api/v0/alerts/#{alert_id}" }
+    let(:alert_id) { 'abcdefg' }
+    let(:monitor_id) { 'hijklmnopqr' }
+    let(:reason) { 'Nantonaku' }
+
+    let(:alert) {
+      {
+        'id' => alert_id,
+        'status' => 'OK',
+        'reason' => reason,
+        'monitorId' => monitor_id,
+        'type' => 'check',
+        'openedAt' => 1234567890
+      }
+    }
+
+    let(:response_object) {
+      alert
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully get alert" do
+      expect(client.get_alert(alert_id).to_h).to eq(response_object)
+    end
+  end
 
   describe '#close_alert' do
     let(:stubbed_response) {
