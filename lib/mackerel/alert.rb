@@ -40,6 +40,12 @@ module Mackerel
         data["alerts"].map { |a| Mackerel::Alert.new(a) }
       end
 
+      def get_alert(alert_id)
+        command = ApiCommand.new(:get, "/api/v0/alerts/#{alert_id}", @api_key)
+        data = command.execute(client)
+        Mackerel::Alert.new(data)
+      end
+
       def close_alert(alertId, reason)
         command = ApiCommand.new(:post, "/api/v0/alerts/#{alertId}/close", @api_key)
         command.body = { reason: reason.to_s }.to_json
