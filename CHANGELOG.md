@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.0 (2021-12-15)
+
+* Add get_alert to Alert API #65 (inommm, pyto86)
+* Send query parameters to alerts api #64 (kenchan)
+
 ## v0.11.0 (2021-03-24)
 
 * Implements downtime API #61 (myoan)
