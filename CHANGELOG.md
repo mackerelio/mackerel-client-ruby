@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.1 (2023-10-20)
+
+* Update faraday requirement from ~> 1.0 to >= 1, < 3 #67 (dependabot[bot])
+* added ruby 3.1 on ci #68 (yset)
+
 ## v0.12.0 (2021-12-15)
 
 * Add get_alert to Alert API #65 (inommm, pyto86)
