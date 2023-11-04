@@ -59,6 +59,12 @@ module Mackerel
         data['monitors'].map{ |m| Mackerel::Monitor.new(m) }
       end
 
+      def get_monitor(monitor_id)
+        command = ApiCommand.new(:get,"/api/v0/monitors/#{monitor_id}", @api_key)
+        data = command.execute(client)
+        Mackerel::Monitor.new(data)
+      end
+
       def update_monitor(monitor_id, monitor)
         command = ApiCommand.new(:put, "/api/v0/monitors/#{monitor_id}", @api_key)
         command.body = monitor.to_json
