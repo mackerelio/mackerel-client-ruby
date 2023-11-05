@@ -62,7 +62,7 @@ module Mackerel
       def get_monitor(monitor_id)
         command = ApiCommand.new(:get, "/api/v0/monitors/#{monitor_id}", @api_key)
         data = command.execute(client)
-        Mackerel::Monitor.new(data)
+        Mackerel::Monitor.new(data['monitor'])
       end
 
       def update_monitor(monitor_id, monitor)
