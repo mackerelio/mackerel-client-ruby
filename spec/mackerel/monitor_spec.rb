@@ -153,7 +153,7 @@ RSpec.describe Mackerel::Client do
     }
 
     let(:response_object) {
-      monitor
+      { 'monitor' => monitor }
     }
 
     before do
@@ -161,7 +161,7 @@ RSpec.describe Mackerel::Client do
     end
 
     it "successfully get monitor" do
-      expect(client.get_monitor(monitor_id).to_h).to eq(response_object)
+      expect(client.get_monitor(monitor_id).to_h).to eq(response_object['monitor'])
     end
   end
 
