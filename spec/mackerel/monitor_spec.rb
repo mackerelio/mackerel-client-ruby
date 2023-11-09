@@ -116,6 +116,55 @@ RSpec.describe Mackerel::Client do
     end
   end
 
+  describe '#get_monitor' do
+    let(:stubbed_response) {
+      [
+        200,
+        {},
+        JSON.dump(response_object)
+      ]
+    }
+
+    let(:test_client) {
+      Faraday.new do |builder|
+        builder.response :raise_error
+        builder.adapter :test do |stubs|
+          stubs.get(api_path) { stubbed_response }
+        end
+      end
+    }
+
+    let(:api_path) { "/api/v0/monitors/#{monitor_id}" }
+    let(:monitor_id) { 'qwertyui' }
+
+    let(:monitor) {
+      {
+        'id' => monitor_id,
+        'type' => 'host',
+        'name' => 'monitor001',
+        'duration' => 5,
+        'metric' => 'loadavg5',
+        'operator' => '>',
+        'warning' => 4,
+        'critical' => 6,
+        'notificationInterval' => 600,
+        'isMute' => false,
+      }
+    }
+
+    let(:response_object) {
+      { 'monitor' => monitor }
+    }
+
+    before do
+      allow(client).to receive(:http_client).and_return(test_client)
+    end
+
+    it "successfully get monitor" do
+      expect(client.get_monitor(monitor_id).to_h).to eq(response_object['monitor'])
+    end
+  end
+
   describe '#update_monitor' do
     let(:stubbed_response) {
       [
