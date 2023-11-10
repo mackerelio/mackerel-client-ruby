@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Mackerel client implemented by Ruby.'
   spec.description   = 'Mackerel client is a library to access Mackerel (https://mackerel.io/).'
   spec.homepage      = "https://mackerel.io/"
-  spec.license       = "Apache 2"
+  spec.license       = "Apache-2.0"
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
