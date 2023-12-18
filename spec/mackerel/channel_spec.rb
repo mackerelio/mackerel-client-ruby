@@ -25,7 +25,7 @@ RSpec.describe Mackerel::Client do
     let(:channels) { 
       {
         "channels" => [
-          { "id" => "361DhijkGFS" , "name" => "Default", "type" => "email" },
+          { "id" => "361DhijkGFS" , "name" => "Default", "type" => "email", "suspendedAt" => 12345678 },
           { "id" => "361FijklHGT" , "name" => "alert_infomation", "type" => "slack" }
         ]
       }
