@@ -1,10 +1,11 @@
 module Mackerel
   class Channel
-    attr_accessor :id, :name, :type
+    attr_accessor :id, :name, :type, :suspendedAt
     def initialize(args = {})
       @id                 = args["id"]
       @name               = args["name"]
       @type               = args["type"]
+      @suspendedAt        = args["suspendedAt"]
     end
 
     def to_h
