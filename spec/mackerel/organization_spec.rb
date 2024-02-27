@@ -25,6 +25,7 @@ RSpec.describe Mackerel::Client do
     let(:organization) { 
       {
         "name" => "HogeH",
+        "displayName" => "Fuga",
       }
     }
 
