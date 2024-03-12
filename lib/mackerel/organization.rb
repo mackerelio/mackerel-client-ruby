@@ -1,8 +1,9 @@
 module Mackerel
   class Organization
-    attr_accessor :name
+    attr_accessor :name, :displayName
     def initialize(args = {})
       @name               = args["name"]
+      @displayName        = args["displayName"]
     end
 
     def to_h
